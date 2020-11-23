@@ -41,8 +41,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComponentsValCalculator.cs" />
+    <Compile Include="StationComponents\ControlCabinet.cs" />
+    <Compile Include="StationComponents\EqualFittings.cs" />
+    <Compile Include="StationComponents\Frame.cs" />
+    <Compile Include="Interfaces\IComponentsValCalculable.cs" />
+    <Compile Include="Interfaces\IStationComponentInitiable.cs" />
+    <Compile Include="StationComponents\Pump.cs" />
     <Compile Include="PumpStation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PumpStationComponent.cs" />
+    <Compile Include="StationComponents\UnequalFittings.cs" />
+    <Compile Include="StationScheme.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PARTS_PATHS.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
