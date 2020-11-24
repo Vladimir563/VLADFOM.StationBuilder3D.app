@@ -43,9 +43,8 @@
   <ItemGroup>
     <Compile Include="ComponentsValCalculator.cs" />
     <Compile Include="StationComponents\ControlCabinet.cs" />
-    <Compile Include="StationComponents\EqualFittings.cs" />
+    <Compile Include="StationComponents\Fittings.cs" />
     <Compile Include="StationComponents\Frame.cs" />
-    <Compile Include="Interfaces\IComponentsValCalculable.cs" />
     <Compile Include="Interfaces\IStationComponentInitiable.cs" />
     <Compile Include="StationComponents\Pump.cs" />
     <Compile Include="PumpStation.cs" />
