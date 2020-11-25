@@ -90,11 +90,6 @@ namespace VLADFOM.StationBuilder3D.clslib
             Нержавеющая_сталь = 0,
             Чёрная_сталь = 1
         }
-        public enum PumpsPositionTypeEnum 
-        {
-            Горизонтальный = 0,
-            Вертикальный =1
-        }
         public enum StationTypeEnum 
         {
             Пожаротушения = 0,

@@ -15,6 +15,7 @@ namespace VLADFOM.StationBuilder3D.clslib
         private int rotationByX;
         private int rotationByY;
         private int rotationByZ;
+        private PumpStation pumpStation;
 
         public string ComponentsName
         {
@@ -51,11 +52,16 @@ namespace VLADFOM.StationBuilder3D.clslib
             get { return rotationByZ; }
             set { rotationByZ = value; }
         }
+        public PumpStation PumpStation
+        {
+            get { return pumpStation; }
+            set { pumpStation = value; }
+        }
 
-
-        public PumpStationComponent(StationComponentsTypeEnum _stationComponentsType, string _componentsName,  
+        public PumpStationComponent(PumpStation _pumpStation, StationComponentsTypeEnum _stationComponentsType, string _componentsName,  
             string _pathToTheComponent, double _componentsWeight, int _rotationByX, int _rotationByY, int _rotationByZ)
         {
+            PumpStation = _pumpStation;
             ComponentsName = _componentsName;
             StationComponentsType = _stationComponentsType;
             PathToTheComponent = _pathToTheComponent;

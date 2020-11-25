@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VLADFOM.StationBuilder3D.clslib
 {
-    public class Pump
+    public class Pump : PumpStationComponent
     {
         private double backPlaneDistance;
         private double frontPlaneDistance;
@@ -15,7 +15,6 @@ namespace VLADFOM.StationBuilder3D.clslib
         private double bottomPlaneDistance;
         private int suctionSideDn;
         private int pressureSideDn;
-        private PumpsPositionTypeEnum pumpsPositionType;
 
         public double BackPlaneDistance
         {
@@ -52,25 +51,23 @@ namespace VLADFOM.StationBuilder3D.clslib
             get { return pressureSideDn; }
             set { pressureSideDn = value; }
         }
-        public PumpsPositionTypeEnum PumpsPositionType
-        {
-            get { return pumpsPositionType; }
-            set { pumpsPositionType = value; }
-        }
 
 
-        public Pump(PumpStation station, int _suctionSideDn, int _pressureSideDn, PumpsPositionTypeEnum _pumpsPositionType, double _backPlaneDistance,
-        double _frontPlaneDistance, double _rightSidePlaneDistance, double _topPlaneDistance, double _bottomPlaneDistance)
+        public Pump(PumpStation _pumpStation, int _suctionSideDn, int _pressureSideDn, double _backPlaneDistance,
+        double _frontPlaneDistance, double _rightSidePlaneDistance, double _topPlaneDistance, double _bottomPlaneDistance,
+            StationComponentsTypeEnum _stationComponentsType, string _componentsName, string _pathToTheComponent,
+            double _componentsWeight, int _rotationByX, int _rotationByY, int _rotationByZ) 
+            : base(_pumpStation, _stationComponentsType, _componentsName, _pathToTheComponent, _componentsWeight, _rotationByX,
+                  _rotationByY, _rotationByZ)
         {
             SuctionSideDn = _suctionSideDn;
             PressureSideDn = _pressureSideDn;
-            PumpsPositionType = _pumpsPositionType;
             BackPlaneDistance = _backPlaneDistance;
             FrontPlaneDistance = _frontPlaneDistance;
             RightSidePlaneDistance = _rightSidePlaneDistance;
             TopPlaneDistance = _topPlaneDistance;
             BottomPlaneDistance = _bottomPlaneDistance;
-            station.Pump = this;
+            PumpStation.Pump = this;
         }
     }
 }

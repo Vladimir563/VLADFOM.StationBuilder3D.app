@@ -6,29 +6,38 @@ using System.Threading.Tasks;
 
 namespace VLADFOM.StationBuilder3D.clslib
 {
-    class UnequalFittings : Fittings
+    public class UnequalFittings : Fittings
     {
-        public UnequalFittings(PumpStation station, StationComponentsTypeEnum _stationComponentsType, 
+        public UnequalFittings(PumpStation _pumpStation, StationComponentsTypeEnum _stationComponentsType, 
             string _componentsName, string _pathToTheComponent, double _componentsWeight, int _rotationByX, 
             int _rotationByY, int _rotationByZ) 
-            : base(station, _stationComponentsType, _componentsName, _pathToTheComponent, _componentsWeight, 
+            : base(_pumpStation, _stationComponentsType, _componentsName, _pathToTheComponent, _componentsWeight, 
                   _rotationByX, _rotationByY, _rotationByZ)
         {
-            this.ComponentsName = ComponentsNameGenerate(station.SecondaryLineDn, station.Pump.SuctionSideDn, 
-                station.Pump.PressureSideDn);
+            this.ComponentsName = this.ComponentsNameGenerate(PumpStation, PumpStation.Pump.SuctionSideDn,
+                PumpStation.Pump.PressureSideDn);
         }
 
-        public override string ComponentsNameGenerate(int mainDn, int pumpsSuctionLineConnectionDn, 
+        public override string ComponentsNameGenerate(PumpStation pumpStation, int pumpsSuctionLineConnectionDn, 
             int pumpsPressureLineConnectionDn)
         {
             string[] s1 = this.StationComponentsType.ToString().Split('_');
-            if (s1.Equals("КЭ"))
+
+            if (s1[0].Equals("КЭ") || s1[0].Equals("КЭР"))
             {
-                return $"{s1[0]}_DN{pumpsSuctionLineConnectionDn}-{mainDn}";
+                return $"{s1[0]}_DN{pumpsSuctionLineConnectionDn}-{pumpStation.SecondaryLineDn}";
             }
-            else if(s1.Equals("КК"))
+            else if (s1[0].Equals("КК") | s1[0].Equals("ККР"))
             {
-                return $"{s1[0]}_DN{pumpsPressureLineConnectionDn}-{mainDn}";
+                return $"{s1[0]}_DN{pumpsPressureLineConnectionDn}-{pumpStation.SecondaryLineDn}";
+            }
+            else if (s1[0].Equals("ТВ") || s1[0].Equals("КВ"))
+            {
+                return $"{s1[0]}_DN{pumpStation.SecondaryLineDn}-{pumpStation.DnSuctionCollector}";
+            }
+            else if (s1[0].Equals("ТН") || s1[0].Equals("КН")) 
+            {
+                return $"{s1[0]}_DN{pumpStation.SecondaryLineDn}-{pumpStation.DnPressureCollector}";
             }
             return string.Empty;
         }
