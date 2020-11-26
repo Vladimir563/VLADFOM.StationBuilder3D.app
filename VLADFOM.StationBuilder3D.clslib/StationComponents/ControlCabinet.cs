@@ -12,6 +12,7 @@ namespace VLADFOM.StationBuilder3D.clslib
             string _pathToTheComponent, double _componentsWeight, int _rotationByX, int _rotationByY, int _rotationByZ) 
             : base(_pumpStation, _stationComponentsType, _componentsName, _pathToTheComponent, _componentsWeight, _rotationByX, _rotationByY, _rotationByZ)
         {
+            PathToTheComponent = ComponentsValCalculator.GetFullPathToTheComponent(PumpStation, this);
         }
     }
 }

@@ -18,6 +18,8 @@ namespace VLADFOM.StationBuilder3D.clslib
                 this.ComponentsName = ComponentsNameAutoGenerate(PumpStation, 0, 0);
             }
             else this.ComponentsName = ComponentsNameGenerate(PumpStation);
+
+            PathToTheComponent = ComponentsValCalculator.GetFullPathToTheComponent(PumpStation, this);
         }
 
         public virtual string ComponentsNameAutoGenerate(PumpStation pumpStation, int pumpsSuctionLineConnectionDn, int pumpsPressureLineConnectionDn)

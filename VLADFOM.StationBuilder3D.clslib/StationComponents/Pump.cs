@@ -68,6 +68,8 @@ namespace VLADFOM.StationBuilder3D.clslib
             TopPlaneDistance = _topPlaneDistance;
             BottomPlaneDistance = _bottomPlaneDistance;
             PumpStation.Pump = this;
+
+            PathToTheComponent = ComponentsValCalculator.GetFullPathToTheComponent(PumpStation, this);
         }
     }
 }

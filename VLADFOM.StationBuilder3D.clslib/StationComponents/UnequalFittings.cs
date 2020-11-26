@@ -20,6 +20,8 @@ namespace VLADFOM.StationBuilder3D.clslib
                     PumpStation.Pump.PressureSideDn);
             }
             else this.ComponentsName = ComponentsNameGenerate(PumpStation);
+
+            PathToTheComponent = ComponentsValCalculator.GetFullPathToTheComponent(PumpStation, this);
         }
 
         public override string ComponentsNameAutoGenerate(PumpStation pumpStation, int pumpsSuctionLineConnectionDn, 

@@ -154,5 +154,13 @@ namespace VLADFOM.StationBuilder3D.clslib
             }
             return 0;
         }
+
+        public static string GetFullPathToTheComponent(PumpStation station, PumpStationComponent component) 
+        {
+            //доделать выбор дирректории от выбора компонента
+            return String.Format(station.componentsLocationPaths["mainDirPath"] +
+            (station.componentsLocationPaths[station.StationScheme.StationType.Equals(StationTypeEnum.Пожаротушения) ? "fireFightingStationCompPath" : "pressureIncreaseStationCompPath"]) +
+            component.ComponentsName + ".SLDPRT");
+        }
     }
 }

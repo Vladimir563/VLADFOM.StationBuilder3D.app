@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.IO;
 
 namespace VLADFOM.StationBuilder3D.clslib
 {
@@ -22,6 +24,7 @@ namespace VLADFOM.StationBuilder3D.clslib
         private string controlCabinetsSize;
         private bool isAutoCalculationDiameterConnection;
         public List<PumpStationComponent> stationComponents = new List<PumpStationComponent>();
+        public Dictionary<string, string> componentsLocationPaths = new Dictionary<string, string>();
 
         public int PumpsCount
         {
@@ -126,6 +129,8 @@ namespace VLADFOM.StationBuilder3D.clslib
             StationScheme = _stationScheme;
             SecondaryLineDn = GetSecondaryLineDn(DnSuctionCollector);
 
+
+            componentsLocationPaths = PathsInitialize(componentsLocationPaths);
             CreatePumpStationComponentsByScheme(StationScheme);
         }
 
@@ -137,6 +142,7 @@ namespace VLADFOM.StationBuilder3D.clslib
 
             return DnSuctionCollector <= 200 ? tubesDn[currentDnIndex - 1] : tubesDn[currentDnIndex - 2];
         }
+
         public void CreatePumpStationComponentsByScheme(StationScheme stationScheme) 
         {
             foreach (var componentsType in stationScheme.stationComponents) 
@@ -145,13 +151,13 @@ namespace VLADFOM.StationBuilder3D.clslib
 
                 if (componentsType.Key.Equals(StationComponentsTypeEnum.Насос_основной))
                 {
-                    stationComponents.Add(new Pump(this, componentsType.Value[0], componentsType.Value[1], 0, 0, 0, 0, 0, StationComponentsTypeEnum.Насос_основной, MainPumpsName, "",
-                        0, 0, 0, 0));
+                    stationComponents.Add(new Pump(this, componentsType.Value[0], componentsType.Value[1], 0, 0, 0, 0, 0, 
+                        StationComponentsTypeEnum.Насос_основной, MainPumpsName, "",0, 0, 0, 0));
                 }
                 else if (componentsType.Equals(StationComponentsTypeEnum.Насос_жокей))
                 {
-                    stationComponents.Add(new Pump(this, componentsType.Value[0], componentsType.Value[1], 0, 0, 0, 0, 0, StationComponentsTypeEnum.Насос_жокей, JockeyPumpsName, "",
-                        0, 0, 0, 0));
+                    stationComponents.Add(new Pump(this, componentsType.Value[0], componentsType.Value[1], 0, 0, 0, 0, 0, 
+                        StationComponentsTypeEnum.Насос_жокей, JockeyPumpsName, "", 0, 0, 0, 0));
                 }
 
                 #region UnEqualsFittings
@@ -176,9 +182,42 @@ namespace VLADFOM.StationBuilder3D.clslib
                 }
                 else if (componentsType.Equals(StationComponentsTypeEnum.ШУ_))
                 {
-                    stationComponents.Add(new ControlCabinet(this, StationComponentsTypeEnum.ШУ_, "ШУ_" + ControlCabinetsSize, "", 0, 0, 0, 0));
+                    stationComponents.Add(new ControlCabinet(this, StationComponentsTypeEnum.ШУ_, "ШУ_" + ControlCabinetsSize, 
+                        "", 0, 0, 0, 0));
                 }
             }
+        }
+
+        public Dictionary<string,string> PathsInitialize (Dictionary<string,string> componentsLocationPaths) 
+        {
+            string[] pathNames = { "mainDirPath", "fireFightingStationCompPath", "pressureIncreaseStationCompPath", "pumpsPath",
+            "controlCabinetsPath", "shuttersPath", "checkValvesPath", "collectorsPath"};
+
+            XmlNode attr;
+
+            XmlDocument xDoc = new XmlDocument();
+
+            var xmlSettingsLocation = Path.Combine(Path.GetDirectoryName(typeof(PumpStation).Assembly.CodeBase).Replace(@"file:\", string.Empty).Replace(@"bin\", string.Empty).Replace(@"Debug", string.Empty), "PARTS_PATHS.xml");
+
+            Console.WriteLine(xmlSettingsLocation);
+
+            xDoc.Load(xmlSettingsLocation);
+
+            // get the root element
+            XmlElement xRoot = xDoc.DocumentElement;
+
+            foreach (XmlNode node in xRoot)
+            {
+                for (int i = 0; i < pathNames.Length; i++)
+                {
+                    if (node.Name.Equals(pathNames[i]))
+                    {
+                        attr = node.Attributes.GetNamedItem("name");
+                        componentsLocationPaths.Add(pathNames[i],attr.Value);
+                    }
+                }
+            }
+            return componentsLocationPaths;
         }
     }
 }

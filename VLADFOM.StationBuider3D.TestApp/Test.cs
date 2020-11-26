@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using VLADFOM.StationBuilder3D.clslib;
+
 namespace BBtest3D
 {
     class Test
@@ -43,14 +46,17 @@ namespace BBtest3D
             //    { StationComponentsTypeEnum.ШУ_, new int[]{0,0} }
             //};
 
-
-
             stationSchemeFireProtection.StationType = StationTypeEnum.Пожаротушения;
             PumpStation pumpStation = new PumpStation("BL65-125", "", "600x800x250", false, 3, 104, 0, 0, 16, CollectorsMaterialEnum.Нержавеющая_сталь, stationSchemeFireProtection);
 
             foreach (var component in pumpStation.stationComponents)
             {
                 Console.WriteLine(component.ComponentsName);
+            }
+            Console.WriteLine("-------------------------------");
+            foreach (var component in pumpStation.stationComponents)
+            {
+                Console.WriteLine(component.PathToTheComponent);
             }
 
             Console.ReadKey();
