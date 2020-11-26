@@ -53,15 +53,15 @@ namespace VLADFOM.StationBuilder3D.clslib
         }
 
 
-        public Pump(PumpStation _pumpStation, int _suctionSideDn, int _pressureSideDn, double _backPlaneDistance,
+        public Pump(PumpStation _pumpStation,  int _pressureSideDn, int _suctionSideDn, double _backPlaneDistance,
         double _frontPlaneDistance, double _rightSidePlaneDistance, double _topPlaneDistance, double _bottomPlaneDistance,
             StationComponentsTypeEnum _stationComponentsType, string _componentsName, string _pathToTheComponent,
             double _componentsWeight, int _rotationByX, int _rotationByY, int _rotationByZ) 
             : base(_pumpStation, _stationComponentsType, _componentsName, _pathToTheComponent, _componentsWeight, _rotationByX,
                   _rotationByY, _rotationByZ)
         {
-            SuctionSideDn = _suctionSideDn;
             PressureSideDn = _pressureSideDn;
+            SuctionSideDn = _suctionSideDn;
             BackPlaneDistance = _backPlaneDistance;
             FrontPlaneDistance = _frontPlaneDistance;
             RightSidePlaneDistance = _rightSidePlaneDistance;

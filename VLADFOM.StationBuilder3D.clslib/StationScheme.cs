@@ -10,23 +10,19 @@ namespace VLADFOM.StationBuilder3D.clslib
     {
         private StationTypeEnum stationType;
 
-        public List<StationComponentsTypeEnum> stationComponents = new List<StationComponentsTypeEnum>();
+        /// <summary>
+        /// StationComponentsTypeEnum - components type
+        /// int[0,0] - there are two component diameters you need in the array
+        /// the first value - smaller DN (or Main DN for component from form)
+        /// the second value - bigger DN
+        /// </summary>
+        public Dictionary<StationComponentsTypeEnum, int[]> stationComponents = new Dictionary<StationComponentsTypeEnum, int[]>();
 
         public StationTypeEnum StationType
         {
             get { return stationType; }
             set { stationType = value; }
         }
-
-        public void AddStationComponents(StationComponentsTypeEnum stationComponent)
-        {
-            stationComponents.Add(stationComponent);
-        }
-        public void RemoveStationComponents(StationComponentsTypeEnum stationComponent)
-        {
-            stationComponents.Remove(stationComponent);
-        }
-
 
     }
 }

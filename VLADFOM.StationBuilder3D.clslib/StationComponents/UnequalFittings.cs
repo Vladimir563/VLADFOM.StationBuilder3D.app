@@ -14,11 +14,15 @@ namespace VLADFOM.StationBuilder3D.clslib
             : base(_pumpStation, _stationComponentsType, _componentsName, _pathToTheComponent, _componentsWeight, 
                   _rotationByX, _rotationByY, _rotationByZ)
         {
-            this.ComponentsName = this.ComponentsNameGenerate(PumpStation, PumpStation.Pump.SuctionSideDn,
-                PumpStation.Pump.PressureSideDn);
+            if (PumpStation.IsAutoCalculationDiameterConnection)
+            {
+                this.ComponentsName = this.ComponentsNameAutoGenerate(PumpStation, PumpStation.Pump.SuctionSideDn,
+                    PumpStation.Pump.PressureSideDn);
+            }
+            else this.ComponentsName = ComponentsNameGenerate(PumpStation);
         }
 
-        public override string ComponentsNameGenerate(PumpStation pumpStation, int pumpsSuctionLineConnectionDn, 
+        public override string ComponentsNameAutoGenerate(PumpStation pumpStation, int pumpsSuctionLineConnectionDn, 
             int pumpsPressureLineConnectionDn)
         {
             string[] s1 = this.StationComponentsType.ToString().Split('_');
@@ -40,6 +44,13 @@ namespace VLADFOM.StationBuilder3D.clslib
                 return $"{s1[0]}_DN{pumpStation.SecondaryLineDn}-{pumpStation.DnPressureCollector}";
             }
             return string.Empty;
+        }
+
+        public override string ComponentsNameGenerate(PumpStation pumpStation)
+        {
+            string[] s1 = this.StationComponentsType.ToString().Split('_');
+
+            return $"{s1[0]}_DN{pumpStation.StationScheme.stationComponents[this.StationComponentsType][0]}-{pumpStation.StationScheme.stationComponents[this.StationComponentsType][1]}";
         }
 
     }

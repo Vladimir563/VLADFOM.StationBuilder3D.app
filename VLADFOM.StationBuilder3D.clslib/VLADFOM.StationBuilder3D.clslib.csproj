@@ -54,6 +54,7 @@
     <Compile Include="StationScheme.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Instruction.txt" />
     <Content Include="PARTS_PATHS.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

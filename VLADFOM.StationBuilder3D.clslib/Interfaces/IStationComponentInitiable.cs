@@ -17,6 +17,7 @@ namespace VLADFOM.StationBuilder3D.clslib
         /// <param name="mainDn">the inside fitting's diameter from the secondary line</param>
         /// <param name="pumpsConnectionDn">the pump's suction/pressure inside diameter</param>
         /// <returns></returns>
-        string ComponentsNameGenerate(PumpStation pumpStation, int pumpsSuctionLineConnectionDn, int pumpsPressureLineConnectionDn);
+        string ComponentsNameGenerate(PumpStation pumpStation);
+        string ComponentsNameAutoGenerate(PumpStation pumpStation, int pumpsSuctionLineConnectionDn, int pumpsPressureLineConnectionDn);
     }
 }

@@ -13,10 +13,14 @@ namespace VLADFOM.StationBuilder3D.clslib
             : base(_pumpStation,_stationComponentsType, _componentsName,  _pathToTheComponent, _componentsWeight, _rotationByX, 
                   _rotationByY, _rotationByZ)
         {
-            this.ComponentsName = ComponentsNameGenerate(PumpStation, 0,0);
+            if (PumpStation.IsAutoCalculationDiameterConnection) 
+            {
+                this.ComponentsName = ComponentsNameAutoGenerate(PumpStation, 0, 0);
+            }
+            else this.ComponentsName = ComponentsNameGenerate(PumpStation);
         }
 
-        public virtual string ComponentsNameGenerate(PumpStation pumpStation, int pumpsSuctionLineConnectionDn, int pumpsPressureLineConnectionDn)
+        public virtual string ComponentsNameAutoGenerate(PumpStation pumpStation, int pumpsSuctionLineConnectionDn, int pumpsPressureLineConnectionDn)
         {
             string [] s1 = this.StationComponentsType.ToString().Split('_');
             if (this.StationComponentsType.Equals(StationComponentsTypeEnum.ЗД_затвор_дисковый_всасывающего_коллектора))
@@ -28,6 +32,14 @@ namespace VLADFOM.StationBuilder3D.clslib
                 return $"{s1[0]}_DN{pumpStation.DnPressureCollector}";
             }
             return $"{s1[0]}_DN{pumpStation.SecondaryLineDn}";
+        }
+
+
+        public virtual string ComponentsNameGenerate(PumpStation pumpStation)
+        {
+            string[] s1 = this.StationComponentsType.ToString().Split('_');
+
+            return $"{s1[0]}_DN{pumpStation.StationScheme.stationComponents[this.StationComponentsType][1]}";
         }
     }
 }

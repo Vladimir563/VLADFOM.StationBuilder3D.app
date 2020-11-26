@@ -70,11 +70,6 @@ namespace VLADFOM.StationBuilder3D.clslib
                 НиппельВнН_ = 1202,
                 НиппельНН_ = 1203,
             #endregion
-
-            #region VibroSupports
-                Виброопора_легкая_рама = 1301,
-                Виброопора_тяжелая_рама = 1302,
-            #endregion
         }
         public enum FrameTypesEnum
             {
@@ -106,12 +101,58 @@ namespace VLADFOM.StationBuilder3D.clslib
 
         public static FrameTypesEnum GetFrameTypeByPumpsWeight(double pumpWeight)
         {
-            throw new NotImplementedException();
+            if (pumpWeight == 0) throw new Exception("Pumps weight can not be equals zero (0). Please initialize this field");
+            if (pumpWeight < 200) { return FrameTypesEnum.StandartRottenFrame; }
+            else if (pumpWeight < 400) { return FrameTypesEnum.WeldedFrame12; }
+            else if (pumpWeight < 600) { return FrameTypesEnum.WeldedFrame14; }
+            else if (pumpWeight < 800) { return FrameTypesEnum.WeldedFrame16; }
+            else { return FrameTypesEnum.WeldedFrame18; }
         }
 
-        public static int GetStationConnectionDnByConsumption(double consumption)
+        public static int GetStationConnectionDnByConsumption(double consumption )
         {
-            throw new NotImplementedException();
+            Dictionary<int, double> tubesDN = new Dictionary<int, double>()
+            {
+                { 50, 60.3 },
+                { 65, 76.1},
+                { 80, 88.9},
+                { 100, 104},
+                { 125, 129},
+                { 150, 154},
+                { 200, 204},
+                { 250, 254},
+                { 300, 304},
+                { 350, 358},
+                { 400, 408},
+                { 450, 458},
+                { 500, 508}
+        };
+            int DN = 0;
+            double D = 0, insideD = 0, S = 0, Q = 0, VFact = 0;
+
+            foreach(var dn in tubesDN)
+            {
+                DN = dn.Key;
+                D = dn.Value;
+                insideD = D - 4;
+                S = (Math.PI * insideD * (insideD / 4)) / 1000000;
+                Q = S * 3600;
+                VFact = consumption / S / 3600;
+
+                if (D < 254 && VFact >= 0.6 && VFact < 1.3)
+                {
+                    return DN;
+                }
+                else if (D >= 250 && D <= 800 && VFact >= 0.8 && VFact < 1.7)
+                {
+                    return DN;
+                }
+                else if (D > 800 && VFact >= 1.2 && VFact < 2.1)
+                {
+                    return DN;
+                }
+            }
+            return 0;
         }
     }
 }
