@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A3DDBF8A-3EBE-4FAB-8F4B-0D974163B571}</ProjectGuid>
+    <ProjectGuid>{71A227AC-E266-44FE-BED8-77C159F6F646}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VLADFOM.StationBuilder3D.clslib</RootNamespace>
-    <AssemblyName>VLADFOM.StationBuilder3D.clslib</AssemblyName>
+    <RootNamespace>VLADFOM.StationBuilder3D.Addin</RootNamespace>
+    <AssemblyName>VLADFOM.StationBuilder3D.Addin</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -30,9 +32,30 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SolidWorks.Interop.sldworks">
+      <HintPath>..\references\SolidWorks.Interop.sldworks.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="SolidWorks.Interop.swconst">
+      <HintPath>..\references\SolidWorks.Interop.swconst.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="SolidWorks.Interop.swdocumentmgr">
+      <HintPath>..\references\SolidWorks.Interop.swdocumentmgr.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="SolidWorks.Interop.swpublished">
+      <HintPath>..\..\..\SLDPROJ\dll\SolidWorks.Interop.swpublished.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,21 +64,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComponentsValCalculator.cs" />
-    <Compile Include="StationComponents\ControlCabinet.cs" />
-    <Compile Include="StationComponents\Fittings.cs" />
-    <Compile Include="StationComponents\Frame.cs" />
-    <Compile Include="Interfaces\IStationComponentInitiable.cs" />
-    <Compile Include="StationComponents\Pump.cs" />
-    <Compile Include="PumpStation.cs" />
+    <Compile Include="StationBuilder3DAddIn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PumpStationComponent.cs" />
-    <Compile Include="StationComponents\UnequalFittings.cs" />
-    <Compile Include="StationScheme.cs" />
+    <Compile Include="StationBuilder3DHostUI.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StationBuilder3DHostUI.Designer.cs">
+      <DependentUpon>StationBuilder3DHostUI.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="README.txt" />
-    <Content Include="PARTS_PATHS.xml" />
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="StationBuilder3DHostUI.resx">
+      <DependentUpon>StationBuilder3DHostUI.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

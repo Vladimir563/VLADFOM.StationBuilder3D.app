@@ -13,8 +13,8 @@ namespace VLADFOM.StationBuilder3D.clslib
         /// <summary>
         /// StationComponentsTypeEnum - components type
         /// int[0,0] - there are two component diameters you need in the array
-        /// the first value - smaller DN (or Main DN for component from form)
-        /// the second value - bigger DN
+        /// the first value - smaller DN 
+        /// the second value - bigger DN (or Main DN for component from form)
         /// </summary>
         public Dictionary<StationComponentsTypeEnum, int[]> stationComponents = new Dictionary<StationComponentsTypeEnum, int[]>();
 

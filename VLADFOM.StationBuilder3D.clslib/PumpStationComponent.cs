@@ -64,7 +64,9 @@ namespace VLADFOM.StationBuilder3D.clslib
             PumpStation = _pumpStation;
             ComponentsName = _componentsName;
             StationComponentsType = _stationComponentsType;
+
             PathToTheComponent = _pathToTheComponent;
+
             ComponentsWeight = _componentsWeight;
             RotationByX = _rotationByX;
             RotationByY = _rotationByY;
