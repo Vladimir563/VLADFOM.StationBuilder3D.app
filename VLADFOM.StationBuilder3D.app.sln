@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VLADFOM.StationBuider3D.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VLADFOM.StationBuilder3D.Addin", "VLADFOM.StationBuilder3D.Addin\VLADFOM.StationBuilder3D.Addin.csproj", "{71A227AC-E266-44FE-BED8-77C159F6F646}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VLADFOM.StationBuilder3D.VSBuilderTestForm", "VLADFOM.StationBuilder3D.VSBuilderTestForm\VLADFOM.StationBuilder3D.VSBuilderTestForm.csproj", "{0E48851B-6AE1-4DE2-A802-1B7168A30E10}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{71A227AC-E266-44FE-BED8-77C159F6F646}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71A227AC-E266-44FE-BED8-77C159F6F646}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71A227AC-E266-44FE-BED8-77C159F6F646}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E48851B-6AE1-4DE2-A802-1B7168A30E10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E48851B-6AE1-4DE2-A802-1B7168A30E10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E48851B-6AE1-4DE2-A802-1B7168A30E10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E48851B-6AE1-4DE2-A802-1B7168A30E10}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

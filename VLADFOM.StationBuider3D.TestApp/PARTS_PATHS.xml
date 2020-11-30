@@ -1,14 +1,51 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <paths>
-  <mainDirPath name ="C:/examplePaths/myPath/"></mainDirPath>
+
+  <mainDirPath name ="C:/examplePaths/RootDirectory/"></mainDirPath>
   
+
   <fireFightingStationCompPath name ="fireExtiguishingCompPath/"></fireFightingStationCompPath>
   <pressureIncreaseStationCompPath name ="pressureIncreaseCompParh/"></pressureIncreaseStationCompPath>
   
-  <pumpsPath name ="myPumps/"></pumpsPath>
-  <controlCabinetsPath name ="myControlCab/"></controlCabinetsPath>
-  <shuttersPath name ="shutters/"></shuttersPath>
-  <checkValvesPath name ="checkValves/"></checkValvesPath>
-  <collectorsPath name ="collectorsPath/"></collectorsPath>
+
+  <pumpsPath name ="pumpsPath/"></pumpsPath>
+  <mainPumpsPath name ="mainPumpsPath/"></mainPumpsPath> 
+  <jockeyPumpsPath name ="jockeyPumpsPath/"></jockeyPumpsPath> 
+
+
+  <controlCabinetsPath name ="myControlCab/"></controlCabinetsPath> 
+
+
+  <lockValvesPath name ="lockValvesPath/"></lockValvesPath>
+  <shuttersPath name ="shutters/"></shuttersPath> 
+  <carvesValvesPath name ="carvesValvesPath/"></carvesValvesPath> 
+
+
+  <checkValvesPath name ="checkValves/"></checkValvesPath> 
+  <flangeCheckValvesPath name ="flangeCheckValvesPath/"></flangeCheckValvesPath> 
+  <carveCheckValvesPath name ="carveCheckValvesPath/"></carveCheckValvesPath> 
+
+
+  <collectorsPath name ="collectorsPath/"></collectorsPath> 
+  <pressureCollectorsPath name ="pressureCollectorsPath/"></pressureCollectorsPath> 
+  <suctionCollectorsPath name ="pressureCollectorsPath/"></suctionCollectorsPath> 
+
+
+  <teesPath name ="teesPath/"></teesPath>
+  <suctionTeesPath name ="suctionTeesPath/"></suctionTeesPath> 
+  <pressureTeesPath name ="pressureTeesPath/"></pressureTeesPath> 
+
   
+  <coilsPath name ="coilsPath/"></coilsPath> 
+  <concentricCoilsPath name = "concentricCoilsPath/"></concentricCoilsPath>
+  <concentricCoilsWithNippelPath name ="concentricCoilsWithNippelPath/"></concentricCoilsWithNippelPath> 
+  <essentricCoilsPath name ="essentricCoilsPath/"></essentricCoilsPath> 
+  <essentricCoilsPathWithNippel name ="essentricCoilsPathWithNippel/"></essentricCoilsPathWithNippel> 
+  <simpleCoilsPath name ="coilPath/"></simpleCoilsPath> 
+  <simpleCoilsWithNippelPath name ="simpleCoilsWithNippelPath/"></simpleCoilsWithNippelPath> 
+
+ 
+  <framesPath name ="framesPath/"></framesPath>
+  <weldedFramesPath name ="weldedFramesPath/"></weldedFramesPath>
+  <framesFromShvellerPath name ="framesFromShvellerPath/"></framesFromShvellerPath>
 </paths>

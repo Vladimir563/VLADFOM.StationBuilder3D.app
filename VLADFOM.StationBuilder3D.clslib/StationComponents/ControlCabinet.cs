@@ -10,7 +10,7 @@ namespace VLADFOM.StationBuilder3D.clslib
     {
         public ControlCabinet(PumpStation _pumpStation, StationComponentsTypeEnum _stationComponentsType, string _componentsName, 
             string _pathToTheComponent, double _componentsWeight, int _rotationByX, int _rotationByY, int _rotationByZ) 
-            : base(_pumpStation, _stationComponentsType, _componentsName, _pathToTheComponent, _componentsWeight, _rotationByX, _rotationByY, _rotationByZ)
+            : base(_pumpStation, _stationComponentsType, _componentsName,  _componentsWeight, _rotationByX, _rotationByY, _rotationByZ)
         {
             PathToTheComponent = ComponentsValCalculator.GetFullPathToTheComponent(PumpStation, this);
         }

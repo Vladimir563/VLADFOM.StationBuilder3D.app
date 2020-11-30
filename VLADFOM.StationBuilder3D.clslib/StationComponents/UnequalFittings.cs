@@ -9,9 +9,8 @@ namespace VLADFOM.StationBuilder3D.clslib
     public class UnequalFittings : Fittings
     {
         public UnequalFittings(PumpStation _pumpStation, StationComponentsTypeEnum _stationComponentsType, 
-            string _componentsName, string _pathToTheComponent, double _componentsWeight, int _rotationByX, 
-            int _rotationByY, int _rotationByZ) 
-            : base(_pumpStation, _stationComponentsType, _componentsName, _pathToTheComponent, _componentsWeight, 
+            string _componentsName, double _componentsWeight, int _rotationByX, int _rotationByY, int _rotationByZ) 
+            : base(_pumpStation, _stationComponentsType, _componentsName, _componentsWeight, 
                   _rotationByX, _rotationByY, _rotationByZ)
         {
             if (PumpStation.IsAutoCalculationDiameterConnection)

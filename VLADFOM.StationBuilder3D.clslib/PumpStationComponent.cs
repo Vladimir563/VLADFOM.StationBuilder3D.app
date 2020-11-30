@@ -59,12 +59,11 @@ namespace VLADFOM.StationBuilder3D.clslib
         }
 
         public PumpStationComponent(PumpStation _pumpStation, StationComponentsTypeEnum _stationComponentsType, string _componentsName,  
-            string _pathToTheComponent, double _componentsWeight, int _rotationByX, int _rotationByY, int _rotationByZ)
+            double _componentsWeight, int _rotationByX, int _rotationByY, int _rotationByZ)
         {
             PumpStation = _pumpStation;
             ComponentsName = _componentsName;
             StationComponentsType = _stationComponentsType;
-            PathToTheComponent = _pathToTheComponent;
             ComponentsWeight = _componentsWeight;
             RotationByX = _rotationByX;
             RotationByY = _rotationByY;

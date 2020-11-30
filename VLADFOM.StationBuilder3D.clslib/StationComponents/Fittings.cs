@@ -9,8 +9,8 @@ namespace VLADFOM.StationBuilder3D.clslib
     public class Fittings : PumpStationComponent, IStationComponentInitiable
     {
         public Fittings(PumpStation _pumpStation, StationComponentsTypeEnum _stationComponentsType, string _componentsName,
-            string _pathToTheComponent, double _componentsWeight, int _rotationByX, int _rotationByY, int _rotationByZ) 
-            : base(_pumpStation,_stationComponentsType, _componentsName,  _pathToTheComponent, _componentsWeight, _rotationByX, 
+            double _componentsWeight, int _rotationByX, int _rotationByY, int _rotationByZ) 
+            : base(_pumpStation,_stationComponentsType, _componentsName, _componentsWeight, _rotationByX, 
                   _rotationByY, _rotationByZ)
         {
             if (PumpStation.IsAutoCalculationDiameterConnection) 
@@ -35,8 +35,6 @@ namespace VLADFOM.StationBuilder3D.clslib
             }
             return $"{s1[0]}_DN{pumpStation.SecondaryLineDn}";
         }
-
-
         public virtual string ComponentsNameGenerate(PumpStation pumpStation)
         {
             string[] s1 = this.StationComponentsType.ToString().Split('_');

@@ -129,7 +129,6 @@ namespace VLADFOM.StationBuilder3D.clslib
             StationScheme = _stationScheme;
             SecondaryLineDn = GetSecondaryLineDn(DnSuctionCollector);
 
-
             componentsLocationPaths = PathsInitialize(componentsLocationPaths);
             CreatePumpStationComponentsByScheme(StationScheme);
         }
@@ -143,6 +142,7 @@ namespace VLADFOM.StationBuilder3D.clslib
             return DnSuctionCollector <= 200 ? tubesDn[currentDnIndex - 1] : tubesDn[currentDnIndex - 2];
         }
 
+        //taking the value of stationScheme list, checking type and creating instance of current type component
         public void CreatePumpStationComponentsByScheme(StationScheme stationScheme) 
         {
             foreach (var componentsType in stationScheme.stationComponents) 
@@ -164,7 +164,7 @@ namespace VLADFOM.StationBuilder3D.clslib
                 else if (s1[0].Equals("КЭ") || s1[0].Equals("КЭР") || s1[0].Equals("КК") || s1[0].Equals("ККР")
                 || s1[0].Equals("ТВ") || s1[0].Equals("ТН") || s1[0].Equals("КВ") || s1[0].Equals("КН"))
                 {
-                    stationComponents.Add(new UnequalFittings(this, componentsType.Key, "", "", 0, 0, 0, 0));
+                    stationComponents.Add(new UnequalFittings(this, componentsType.Key, "", 0, 0, 0, 0));
                 }
                 #endregion
                 #region EqualsFittings
@@ -172,7 +172,7 @@ namespace VLADFOM.StationBuilder3D.clslib
                     s1[0].Equals("ОКР") || s1[0].Equals("РК") || s1[0].Equals("Американка") || s1[0].Equals("НиппельВнВн")
                     || s1[0].Equals("НиппельВнН") || s1[0].Equals("НиппельНН"))
                 {
-                    stationComponents.Add(new Fittings(this, componentsType.Key, "", "", 0, 0, 0, 0));
+                    stationComponents.Add(new Fittings(this, componentsType.Key, "", 0, 0, 0, 0));
                 }
                 #endregion
 
@@ -190,16 +190,44 @@ namespace VLADFOM.StationBuilder3D.clslib
 
         public Dictionary<string,string> PathsInitialize (Dictionary<string,string> componentsLocationPaths) 
         {
-            string[] pathNames = { "mainDirPath", "fireFightingStationCompPath", "pressureIncreaseStationCompPath", "pumpsPath",
-            "controlCabinetsPath", "shuttersPath", "checkValvesPath", "collectorsPath"};
+            string[] pathNames = { 
+
+                "mainDirPath", 
+                "fireFightingStationCompPath",
+                "pressureIncreaseStationCompPath",
+                "pumpsPath",
+                "mainPumpsPath",
+                "jockeyPumpsPath",
+                "controlCabinetsPath",
+                "lockValvesPath",
+                "shuttersPath",
+                "carvesValvesPath",
+                "checkValvesPath",
+                "flangeCheckValvesPath",
+                "carveCheckValvesPath",
+                "collectorsPath",
+                "pressureCollectorsPath",
+                "suctionCollectorsPath",
+                "teesPath",
+                "suctionTeesPath",
+                "pressureTeesPath",
+                "coilsPath",
+                "concentricCoilsPath",
+                "concentricCoilsWithNippelPath",
+                "essentricCoilsPath",
+                "essentricCoilsPathWithNippel",
+                "simpleCoilsPath",
+                "simpleCoilsWithNippelPath",
+                "framesPath",
+                "weldedFramesPath",
+                "framesFromShvellerPath"
+            };
 
             XmlNode attr;
 
             XmlDocument xDoc = new XmlDocument();
 
             var xmlSettingsLocation = Path.Combine(Path.GetDirectoryName(typeof(PumpStation).Assembly.CodeBase).Replace(@"file:\", string.Empty).Replace(@"bin\", string.Empty).Replace(@"Debug", string.Empty), "PARTS_PATHS.xml");
-
-            Console.WriteLine(xmlSettingsLocation);
 
             xDoc.Load(xmlSettingsLocation);
 
