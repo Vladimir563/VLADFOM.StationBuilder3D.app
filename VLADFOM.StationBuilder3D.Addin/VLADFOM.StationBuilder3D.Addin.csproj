@@ -90,5 +90,18 @@
       <DependentUpon>VisualStationBuilder3D.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VLADFOM.StationBuilder3D.clslib\VLADFOM.StationBuilder3D.clslib.csproj">
+      <Project>{A3DDBF8A-3EBE-4FAB-8F4B-0D974163B571}</Project>
+      <Name>VLADFOM.StationBuilder3D.clslib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VLADFOM.StationBuilder3D.VSBuilderTestForm\VLADFOM.StationBuilder3D.VSBuilder3DUIForm.csproj">
+      <Project>{0E48851B-6AE1-4DE2-A802-1B7168A30E10}</Project>
+      <Name>VLADFOM.StationBuilder3D.VSBuilder3DUIForm</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PARTS_PATHS.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

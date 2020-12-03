@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using StationBuilder3DAddin;
+using VLADFOM.StationBuilder3D.VSBuilderTestForm;
+
 
 namespace VLADFOM.StationBuilder3D.Addin
 {
@@ -18,6 +20,12 @@ namespace VLADFOM.StationBuilder3D.Addin
         public StationBuilder3DHostUI()
         {
             InitializeComponent();
+        }
+
+        private void cmdUIFormStart_Click(object sender, EventArgs e)
+        {
+            UIForm UIForm = new UIForm();
+            UIForm.Show();
         }
     }
 }

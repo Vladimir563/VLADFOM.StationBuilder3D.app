@@ -139,7 +139,7 @@ namespace VLADFOM.StationBuilder3D.clslib
             int[] tubesDn = { 25, 32, 40, 50, 65, 80, 100, 125, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600 };
             int currentDnIndex = Array.IndexOf(tubesDn, DnSuctionCollector);
 
-            return DnSuctionCollector <= 200 ? tubesDn[currentDnIndex - 1] : tubesDn[currentDnIndex - 2];
+            return DnSuctionCollector < 150 ? tubesDn[currentDnIndex - 1] : tubesDn[currentDnIndex - 2];
         }
 
         //taking the value of stationScheme list, checking type and creating instance of current type component
@@ -170,7 +170,8 @@ namespace VLADFOM.StationBuilder3D.clslib
                 #region EqualsFittings
                 else if (s1[0].Equals("К") || s1[0].Equals("КР") || s1[0].Equals("ЗД") || s1[0].Equals("ОКФ") ||
                     s1[0].Equals("ОКР") || s1[0].Equals("РК") || s1[0].Equals("Американка") || s1[0].Equals("НиппельВнВн")
-                    || s1[0].Equals("НиппельВнН") || s1[0].Equals("НиппельНН"))
+                    || s1[0].Equals("НиппельВнН") || s1[0].Equals("НиппельНН") || s1[0].Equals("КВЖ") || s1[0].Equals("КНЖ") 
+                    || s1[0].Equals("ФланецСРеле"))
                 {
                     stationComponents.Add(new Fittings(this, componentsType.Key, "", 0, 0, 0, 0));
                 }
@@ -193,8 +194,6 @@ namespace VLADFOM.StationBuilder3D.clslib
             string[] pathNames = { 
 
                 "mainDirPath", 
-                "fireFightingStationCompPath",
-                "pressureIncreaseStationCompPath",
                 "pumpsPath",
                 "mainPumpsPath",
                 "jockeyPumpsPath",
@@ -218,9 +217,12 @@ namespace VLADFOM.StationBuilder3D.clslib
                 "essentricCoilsPathWithNippel",
                 "simpleCoilsPath",
                 "simpleCoilsWithNippelPath",
+                "jockeySuctionCoils",
+                "jockeyPressureCoils",
                 "framesPath",
                 "weldedFramesPath",
-                "framesFromShvellerPath"
+                "framesFromShvellerPath",
+                "flangesWithReley"
             };
 
             XmlNode attr;

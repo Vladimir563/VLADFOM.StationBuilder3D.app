@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VLADFOM.StationBuilder3D.clslib", "VLADFOM.StationBuilder3D.clslib\VLADFOM.StationBuilder3D.clslib.csproj", "{A3DDBF8A-3EBE-4FAB-8F4B-0D974163B571}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VLADFOM.StationBuider3D.TestApp", "VLADFOM.StationBuider3D.TestApp\VLADFOM.StationBuider3D.TestApp.csproj", "{819E0A17-8405-435C-ABAC-BC90F5EB6CA6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VLADFOM.StationBuider3D.SBuilder3DBusinessLogic", "VLADFOM.StationBuider3D.TestApp\VLADFOM.StationBuider3D.SBuilder3DBusinessLogic.csproj", "{819E0A17-8405-435C-ABAC-BC90F5EB6CA6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VLADFOM.StationBuilder3D.Addin", "VLADFOM.StationBuilder3D.Addin\VLADFOM.StationBuilder3D.Addin.csproj", "{71A227AC-E266-44FE-BED8-77C159F6F646}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VLADFOM.StationBuilder3D.VSBuilderTestForm", "VLADFOM.StationBuilder3D.VSBuilderTestForm\VLADFOM.StationBuilder3D.VSBuilderTestForm.csproj", "{0E48851B-6AE1-4DE2-A802-1B7168A30E10}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VLADFOM.StationBuilder3D.VSBuilder3DUIForm", "VLADFOM.StationBuilder3D.VSBuilderTestForm\VLADFOM.StationBuilder3D.VSBuilder3DUIForm.csproj", "{0E48851B-6AE1-4DE2-A802-1B7168A30E10}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

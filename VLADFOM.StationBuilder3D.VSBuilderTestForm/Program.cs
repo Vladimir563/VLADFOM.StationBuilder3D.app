@@ -16,7 +16,7 @@ namespace VLADFOM.StationBuilder3D.VSBuilderTestForm
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new VSBuilder3DForm());
+            Application.Run(new UIForm());
         }
     }
 }

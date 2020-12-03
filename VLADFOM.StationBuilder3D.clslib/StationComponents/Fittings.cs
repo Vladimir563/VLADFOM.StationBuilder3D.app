@@ -25,13 +25,19 @@ namespace VLADFOM.StationBuilder3D.clslib
         public virtual string ComponentsNameAutoGenerate(PumpStation pumpStation, int pumpsSuctionLineConnectionDn, int pumpsPressureLineConnectionDn)
         {
             string [] s1 = this.StationComponentsType.ToString().Split('_');
-            if (this.StationComponentsType.Equals(StationComponentsTypeEnum.ЗД_затвор_дисковый_всасывающего_коллектора))
+            if (this.StationComponentsType.Equals(StationComponentsTypeEnum.ЗД_затвор_дисковый_всасывающего_коллектора) ||
+                this.StationComponentsType.Equals(StationComponentsTypeEnum.КВЖ_катушка_для_жокей_насоса_всасывающая))
             {
                 return $"{s1[0]}_DN{pumpStation.DnSuctionCollector}";
             }
-            else if (this.StationComponentsType.Equals(StationComponentsTypeEnum.ЗД_затвор_дисковый_напорного_коллектора)) 
+            else if (this.StationComponentsType.Equals(StationComponentsTypeEnum.ЗД_затвор_дисковый_напорного_коллектора) ||
+                this.StationComponentsType.Equals(StationComponentsTypeEnum.КНЖ_катушка_для_жокей_насоса_напорная))
             {
                 return $"{s1[0]}_DN{pumpStation.DnPressureCollector}";
+            }
+            else if (this.StationComponentsType.Equals(StationComponentsTypeEnum.ФланецСРеле_))
+            {
+                return $"{s1[0]}_DN{pumpStation.Pump.PressureSideDn}";
             }
             return $"{s1[0]}_DN{pumpStation.SecondaryLineDn}";
         }

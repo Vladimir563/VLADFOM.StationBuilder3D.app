@@ -46,8 +46,12 @@ namespace BBtest3D
                 { StationComponentsTypeEnum.ШУ_, new int[]{0,0} }
             };
 
+            
             stationSchemeFireProtection.StationType = StationTypeEnum.Пожаротушения;
-            PumpStation pumpStation = new PumpStation("BL65-125", "", "600x800x250", true, 3, 104, 0, 0, 16, CollectorsMaterialEnum.Нержавеющая_сталь, stationSchemeFireProtection);
+            PumpStation pumpStation = new PumpStation("BL65-125", "", "600x800x250", true, 3, 104, 0, 0, 16, 
+                CollectorsMaterialEnum.Нержавеющая_сталь, stationSchemeFireProtection);
+
+            
 
             foreach (var component in pumpStation.stationComponents)
             {

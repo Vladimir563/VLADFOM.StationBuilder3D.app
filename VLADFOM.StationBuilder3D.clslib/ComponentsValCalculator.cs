@@ -22,6 +22,8 @@ namespace VLADFOM.StationBuilder3D.clslib
                 ККР_катушка_концентрическая_резьбовая =  203,
                 КЭ_катушка_эксцентрическая = 204,
                 КЭ_катушка_эксцентрическая_резьбовая = 205,
+                КВЖ_катушка_для_жокей_насоса_всасывающая = 206,
+                КНЖ_катушка_для_жокей_насоса_напорная = 207,
             #endregion
 
             #region Collectors
@@ -166,10 +168,7 @@ namespace VLADFOM.StationBuilder3D.clslib
 
         public static string GetFullPathToTheComponent(PumpStation station, PumpStationComponent component) 
         {
-
             return String.Format(station.componentsLocationPaths["mainDirPath"] + 
-                station.componentsLocationPaths[station.StationScheme.StationType.Equals(StationTypeEnum.Пожаротушения) ? 
-                "fireFightingStationCompPath" : "pressureIncreaseStationCompPath"] + 
             GetComponentsPathByType(station, component) + component.ComponentsName + ".SLDPRT");
         }
 
@@ -207,7 +206,8 @@ namespace VLADFOM.StationBuilder3D.clslib
             {
                 return station.componentsLocationPaths["controlCabinetsPath"];
             }
-            else if (s1[0].Equals("КЭ") || s1[0].Equals("КЭР") || s1[0].Equals("КК") || s1[0].Equals("ККР") || s1[0].Equals("К") || s1[0].Equals("КР"))
+            else if (s1[0].Equals("КЭ") || s1[0].Equals("КЭР") || s1[0].Equals("КК") || s1[0].Equals("ККР") || s1[0].Equals("К")
+                || s1[0].Equals("КР") || s1[0].Equals("КВЖ") || s1[0].Equals("КНЖ"))
             {
                 string localPath = string.Empty;
                 if (s1[0].Equals("КЭ")) localPath = station.componentsLocationPaths["essentricCoilsPath"];
@@ -216,14 +216,20 @@ namespace VLADFOM.StationBuilder3D.clslib
                 if (s1[0].Equals("ККР")) localPath = station.componentsLocationPaths["concentricCoilsWithNippelPath"];
                 if (s1[0].Equals("К")) localPath = station.componentsLocationPaths["simpleCoilsPath"];
                 if (s1[0].Equals("КР")) localPath = station.componentsLocationPaths["simpleCoilsWithNippelPath"];
+                if (s1[0].Equals("КВЖ")) localPath = station.componentsLocationPaths["jockeySuctionCoils"];
+                if (s1[0].Equals("КНЖ")) localPath = station.componentsLocationPaths["jockeyPressureCoils"];
 
                 return station.componentsLocationPaths["coilsPath"] + localPath;
             }
             else if (s1[0].Equals("Рама"))
             {
-                Frame frame = (Frame) component;
+                Frame frame = (Frame)component;
                 return station.componentsLocationPaths["framesPath"] + (frame.FrameType.Equals(FrameTypesEnum.StandartRottenFrame)
                     ? station.componentsLocationPaths["weldedFramesPath"] : station.componentsLocationPaths["framesFromShvellerPath"]);
+            }
+            else if (s1[0].Equals("ФланецСРеле")) 
+            {
+                return station.componentsLocationPaths["flangesWithReley"];
             }
 
             return string.Empty;
