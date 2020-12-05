@@ -23,8 +23,9 @@ namespace VLADFOM.StationBuilder3D.clslib
         private string jockeyPumpsName;
         private string controlCabinetsSize;
         private bool isAutoCalculationDiameterConnection;
-        public List<PumpStationComponent> stationComponents = new List<PumpStationComponent>();
+        private int distanceBetweenAxis;
         public Dictionary<string, string> componentsLocationPaths = new Dictionary<string, string>();
+        public Dictionary<StationComponentsTypeEnum, PumpStationComponent> stationComponents = new Dictionary<StationComponentsTypeEnum, PumpStationComponent>();
 
         public int PumpsCount
         {
@@ -112,9 +113,16 @@ namespace VLADFOM.StationBuilder3D.clslib
             get { return secondaryLineDn; }
             set { secondaryLineDn = value; }
         }
+        public int DistanceBetweenAxis
+        {
+            get { return distanceBetweenAxis; }
+            set { distanceBetweenAxis = value; }
+        }
 
-        public PumpStation(string _mainPumpsName, string _jockeyPumpsName, string _controlCabinetsName, bool _isAutoCalculationDiameterConnection, int _pumpsCount, double _waterConsumption, int _dnSuctionCollector, int _dnPressureCollector,
-            double _pressureValueForStation, CollectorsMaterialEnum _collectorsMaterial, StationScheme _stationScheme)
+        public PumpStation(string _mainPumpsName, string _jockeyPumpsName, string _controlCabinetsName, 
+            bool _isAutoCalculationDiameterConnection, int _pumpsCount, double _waterConsumption, int _dnSuctionCollector, 
+            int _dnPressureCollector, double _pressureValueForStation, CollectorsMaterialEnum _collectorsMaterial, 
+            StationScheme _stationScheme)
         {
             MainPumpsName = _mainPumpsName;
             JockeyPumpsName = _jockeyPumpsName;
@@ -151,20 +159,27 @@ namespace VLADFOM.StationBuilder3D.clslib
 
                 if (componentsType.Key.Equals(StationComponentsTypeEnum.Насос_основной))
                 {
-                    stationComponents.Add(new Pump(this, componentsType.Value[0], componentsType.Value[1], 0, 0, 0, 0, 0, 
-                        StationComponentsTypeEnum.Насос_основной, MainPumpsName, "",0, 0, 0, 0));
+                    Pump stationPump = new Pump(this, componentsType.Value[0], componentsType.Value[1],
+                        StationComponentsTypeEnum.Насос_основной, MainPumpsName);
+                    StationComponentInitialize(stationPump, stationScheme);
+                    stationComponents.Add(componentsType.Key, stationPump);
+
                 }
                 else if (componentsType.Equals(StationComponentsTypeEnum.Насос_жокей))
                 {
-                    stationComponents.Add(new Pump(this, componentsType.Value[0], componentsType.Value[1], 0, 0, 0, 0, 0, 
-                        StationComponentsTypeEnum.Насос_жокей, JockeyPumpsName, "", 0, 0, 0, 0));
+                    Pump stationJockeyPump = new Pump(this, componentsType.Value[0], componentsType.Value[1],
+                        StationComponentsTypeEnum.Насос_жокей, JockeyPumpsName);
+                    StationComponentInitialize(stationJockeyPump, stationScheme);
+                    stationComponents.Add(componentsType.Key, stationJockeyPump);
                 }
 
                 #region UnEqualsFittings
                 else if (s1[0].Equals("КЭ") || s1[0].Equals("КЭР") || s1[0].Equals("КК") || s1[0].Equals("ККР")
                 || s1[0].Equals("ТВ") || s1[0].Equals("ТН") || s1[0].Equals("КВ") || s1[0].Equals("КН"))
                 {
-                    stationComponents.Add(new UnequalFittings(this, componentsType.Key, "", 0, 0, 0, 0));
+                    UnequalFittings unequalFitting = new UnequalFittings(this, componentsType.Key);
+                    StationComponentInitialize(unequalFitting, stationScheme);
+                    stationComponents.Add(componentsType.Key, unequalFitting);
                 }
                 #endregion
                 #region EqualsFittings
@@ -173,18 +188,23 @@ namespace VLADFOM.StationBuilder3D.clslib
                     || s1[0].Equals("НиппельВнН") || s1[0].Equals("НиппельНН") || s1[0].Equals("КВЖ") || s1[0].Equals("КНЖ") 
                     || s1[0].Equals("ФланецСРеле"))
                 {
-                    stationComponents.Add(new Fittings(this, componentsType.Key, "", 0, 0, 0, 0));
+                    Fittings fitting = new Fittings(this, componentsType.Key);
+                    StationComponentInitialize(fitting, stationScheme);
+                    stationComponents.Add(componentsType.Key, fitting);
                 }
                 #endregion
 
-                else if (componentsType.Equals(StationComponentsTypeEnum.Рама_))
+                else if (componentsType.Key.Equals(StationComponentsTypeEnum.Рама_))
                 {
-                    stationComponents.Add(new Frame(this, StationComponentsTypeEnum.Рама_, "", "", 0, 0, 0, 0));
+                    Frame frame = new Frame(this, StationComponentsTypeEnum.Рама_);
+                    StationComponentInitialize(frame, stationScheme);
+                    stationComponents.Add(componentsType.Key, frame);
                 }
-                else if (componentsType.Equals(StationComponentsTypeEnum.ШУ_))
+                else if (componentsType.Key.Equals(StationComponentsTypeEnum.ШУ_))
                 {
-                    stationComponents.Add(new ControlCabinet(this, StationComponentsTypeEnum.ШУ_, "ШУ_" + ControlCabinetsSize, 
-                        "", 0, 0, 0, 0));
+                    ControlCabinet controlCabinet = new ControlCabinet(this, StationComponentsTypeEnum.ШУ_, "ШУ_" + ControlCabinetsSize);
+                    StationComponentInitialize(controlCabinet, stationScheme);
+                    stationComponents.Add(componentsType.Key, controlCabinet);
                 }
             }
         }
@@ -248,6 +268,25 @@ namespace VLADFOM.StationBuilder3D.clslib
                 }
             }
             return componentsLocationPaths;
+        }
+
+        public void StationComponentInitialize(PumpStationComponent stationComponent, StationScheme stationScheme) 
+        {
+            foreach (var componentsType in stationScheme.stationComponents)
+            {
+                if (stationComponent.StationComponentsType.Equals(componentsType.Key) && componentsType.Value.Length > 0)
+                {
+                    stationComponent.RotationByX = componentsType.Value[2];
+                    stationComponent.RotationByY = componentsType.Value[3];
+                    stationComponent.RotationByZ = componentsType.Value[4];
+                }
+                else if(stationComponent.StationComponentsType.Equals(componentsType.Key))
+                {
+                    stationComponent.RotationByX = 0;
+                    stationComponent.RotationByY = 0;
+                    stationComponent.RotationByZ = 0;
+                }
+            }
         }
     }
 }

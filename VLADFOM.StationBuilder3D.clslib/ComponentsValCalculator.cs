@@ -97,13 +97,16 @@ namespace VLADFOM.StationBuilder3D.clslib
             Повышения_давления = 1,
             Совмещённая = 2,
             Ф_Драйв = 3,
-            Мультидрайв = 4,
-            БМИ = 5,
-            СПД = 6
+            Мультидрайв = 4
+        }
+        public enum PumpsType 
+        {
+            Горизонтальный = 0,
+            Вертикальный = 1
         }
     #endregion
 
-    class ComponentsValCalculator
+    public class ComponentsValCalculator
     {
         public static int[] GetControlCabinetPositionProp(string controlCabinetName)
         {
@@ -118,6 +121,52 @@ namespace VLADFOM.StationBuilder3D.clslib
             else if (pumpWeight < 600) { return FrameTypesEnum.WeldedFrame14; }
             else if (pumpWeight < 800) { return FrameTypesEnum.WeldedFrame16; }
             else { return FrameTypesEnum.WeldedFrame18; }
+        }
+
+        public static string GetFramesFullName(PumpStation _pumpStation)
+        {
+            if (GetFrameTypeByPumpsWeight(_pumpStation.Pump.ComponentsWeight).Equals(FrameTypesEnum.StandartRottenFrame))
+            {
+                string rottenFrameSize = string.Empty;
+                if (_pumpStation.DistanceBetweenAxis == 300)
+                {
+                    if (_pumpStation.PumpsCount == 2)
+                    {
+                        rottenFrameSize = "400х600х4";
+                    }
+                    else if (_pumpStation.PumpsCount == 3)
+                    {
+                        rottenFrameSize = "400х900х4";
+                    }
+                    else if (_pumpStation.PumpsCount == 4)
+                    {
+                        rottenFrameSize = "400х1200х4";
+                    }
+                }
+                else
+                {
+                    if (_pumpStation.PumpsCount == 2)
+                    {
+                        rottenFrameSize = "500х990х4";
+                    }
+                    else if (_pumpStation.PumpsCount == 3)
+                    {
+                        rottenFrameSize = "500х1200х4";
+                    }
+                    else if (_pumpStation.PumpsCount == 4)
+                    {
+                        rottenFrameSize = "500х1700х4";
+                    }
+                }
+
+                if (rottenFrameSize == string.Empty)
+                {
+                    return "Рама_швеллер_10П";
+                }
+                return $"Рама_гнутая_{rottenFrameSize}";
+            }
+
+            return $"Рама_швеллер_{(int)ComponentsValCalculator.GetFrameTypeByPumpsWeight(_pumpStation.Pump.ComponentsWeight)}П";
         }
 
         public static int GetStationConnectionDnByConsumption(double consumption )
@@ -172,15 +221,15 @@ namespace VLADFOM.StationBuilder3D.clslib
             GetComponentsPathByType(station, component) + component.ComponentsName + ".SLDPRT");
         }
 
-
         public static string GetComponentsPathByType(PumpStation station, PumpStationComponent component) 
         {
             string[] s1 = component.StationComponentsType.ToString().Split('_');
 
             if (s1[0].Equals("Насос"))
             {
+                string [] startPumpsNameChars = station.Pump.ComponentsName.Split('_');
                 return station.componentsLocationPaths["pumpsPath"] + (component.StationComponentsType.Equals(StationComponentsTypeEnum.Насос_основной)
-                    ? station.componentsLocationPaths["mainPumpsPath"] : station.componentsLocationPaths["jockeyPumpsPath"]);
+                    ? station.componentsLocationPaths["mainPumpsPath"] : station.componentsLocationPaths["jockeyPumpsPath"]) + startPumpsNameChars[0] + @"\";
             }
             else if (s1[0].Equals("КВ") || s1[0].Equals("КН"))
             {
@@ -233,6 +282,21 @@ namespace VLADFOM.StationBuilder3D.clslib
             }
 
             return string.Empty;
+        }
+
+        public static int GetDistanceBetweenPumpsAxis(Pump pump) 
+        {
+            int[] distanceBetweenPumpsAxis = {300, 500, 600, 700, 800, 900, 1000};
+
+            for (int i = 0; i < distanceBetweenPumpsAxis.Length; i++)
+            {
+                if (distanceBetweenPumpsAxis[i] - pump.RightSidePlaneDistance * 2 > 200)
+                {
+                    return distanceBetweenPumpsAxis[i];
+                }
+            }
+
+            throw new Exception("There is no right distance between axis for current pumps instance");
         }
     }
 }

@@ -16,12 +16,9 @@ namespace VLADFOM.StationBuilder3D.clslib
             set { frameType = value; }
         }
 
-        public Frame(PumpStation _pumpStation, StationComponentsTypeEnum _stationComponentsType, string _componentsName, string _pathToTheComponent,
-            double _componentsWeight, int _rotationByX, int _rotationByY, int _rotationByZ) 
-            : base(_pumpStation,_stationComponentsType, _componentsName, _componentsWeight, _rotationByX, 
-                  _rotationByY, _rotationByZ)
+        public Frame(PumpStation _pumpStation, StationComponentsTypeEnum _stationComponentsType) 
+            : base(_pumpStation,_stationComponentsType)
         {
-            FrameType = ComponentsValCalculator.GetFrameTypeByPumpsWeight(PumpStation.Pump.ComponentsWeight);
             PathToTheComponent = ComponentsValCalculator.GetFullPathToTheComponent(PumpStation, this);
         }
     }

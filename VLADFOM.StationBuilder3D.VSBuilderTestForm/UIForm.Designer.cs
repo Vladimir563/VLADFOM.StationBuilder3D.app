@@ -43,6 +43,11 @@
             this.comboBoxPumpsType = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.cmdAssemblyStart = new System.Windows.Forms.Button();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.comboBoxPressureValueForStation = new System.Windows.Forms.ComboBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.comboBoxCollectorsMaterial = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.errorProviderUIForm)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPumpsCount)).BeginInit();
             this.SuspendLayout();
@@ -186,7 +191,7 @@
             // 
             // cmdAssemblyStart
             // 
-            this.cmdAssemblyStart.Location = new System.Drawing.Point(104, 276);
+            this.cmdAssemblyStart.Location = new System.Drawing.Point(96, 327);
             this.cmdAssemblyStart.Name = "cmdAssemblyStart";
             this.cmdAssemblyStart.Size = new System.Drawing.Size(115, 23);
             this.cmdAssemblyStart.TabIndex = 13;
@@ -194,11 +199,68 @@
             this.cmdAssemblyStart.UseVisualStyleBackColor = true;
             this.cmdAssemblyStart.Click += new System.EventHandler(this.cmdAssemblyStart_Click);
             // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(321, 37);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(210, 256);
+            this.richTextBox1.TabIndex = 14;
+            this.richTextBox1.Text = "";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(21, 252);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(114, 13);
+            this.label7.TabIndex = 15;
+            this.label7.Text = "Требуемое давление";
+            // 
+            // comboBoxPressureValueForStation
+            // 
+            this.comboBoxPressureValueForStation.FormattingEnabled = true;
+            this.comboBoxPressureValueForStation.Items.AddRange(new object[] {
+            "10",
+            "16",
+            "25",
+            "40"});
+            this.comboBoxPressureValueForStation.Location = new System.Drawing.Point(149, 249);
+            this.comboBoxPressureValueForStation.Name = "comboBoxPressureValueForStation";
+            this.comboBoxPressureValueForStation.Size = new System.Drawing.Size(140, 21);
+            this.comboBoxPressureValueForStation.TabIndex = 16;
+            this.comboBoxPressureValueForStation.Text = "Не установлено";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(21, 288);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(102, 13);
+            this.label8.TabIndex = 17;
+            this.label8.Text = "Материал обвязки";
+            // 
+            // comboBoxCollectorsMaterial
+            // 
+            this.comboBoxCollectorsMaterial.FormattingEnabled = true;
+            this.comboBoxCollectorsMaterial.Items.AddRange(new object[] {
+            "Нержавеющая_сталь",
+            "Чёрная_сталь"});
+            this.comboBoxCollectorsMaterial.Location = new System.Drawing.Point(149, 285);
+            this.comboBoxCollectorsMaterial.Name = "comboBoxCollectorsMaterial";
+            this.comboBoxCollectorsMaterial.Size = new System.Drawing.Size(140, 21);
+            this.comboBoxCollectorsMaterial.TabIndex = 18;
+            this.comboBoxCollectorsMaterial.Text = "Не установлено";
+            // 
             // UIForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(334, 361);
+            this.ClientSize = new System.Drawing.Size(561, 447);
+            this.Controls.Add(this.comboBoxCollectorsMaterial);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.comboBoxPressureValueForStation);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.cmdAssemblyStart);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.comboBoxPumpsType);
@@ -241,5 +303,10 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox comboBoxPumpsType;
         private System.Windows.Forms.Button cmdAssemblyStart;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.ComboBox comboBoxPressureValueForStation;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ComboBox comboBoxCollectorsMaterial;
+        private System.Windows.Forms.Label label8;
     }
 }

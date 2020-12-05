@@ -46,7 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="StationBuilder3DBL.cs" />
+    <Compile Include="StationBuilder3DTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +54,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="PARTS_PATHS.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VLADFOM.StationBuilder3D.clsbllib\VLADFOM.StationBuilder3D.clsbllib.csproj">
+      <Project>{C3D40B38-E048-4838-AB68-06FB7CF2FFF7}</Project>
+      <Name>VLADFOM.StationBuilder3D.clsbllib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
