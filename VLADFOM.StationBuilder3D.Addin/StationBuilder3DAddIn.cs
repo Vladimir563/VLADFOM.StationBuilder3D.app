@@ -37,7 +37,7 @@ namespace StationBuilder3DAddin
         /// <summary>
         /// The current instance of the SolidWorks application
         /// </summary>
-        private SldWorks mSolidWorksApplication;
+        public SldWorks mSolidWorksApplication;
 
         #endregion
 
@@ -60,9 +60,9 @@ namespace StationBuilder3DAddin
         /// <returns></returns>
         public bool ConnectToSW(object ThisSW, int Cookie)
         {
+            
             //Store a reference to the current SW instance
             mSolidWorksApplication = (SldWorks)ThisSW;
-
             //Store cookie id
             mSwCookie = Cookie;
 
@@ -163,6 +163,7 @@ namespace StationBuilder3DAddin
         }
 
         #endregion
+
 
     }
 }

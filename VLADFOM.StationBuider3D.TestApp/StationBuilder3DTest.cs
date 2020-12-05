@@ -69,21 +69,24 @@ namespace BBtest3D
             //    Console.WriteLine("-------------------------------" + "\n");
             //}
 
+            //BusinessLogic businessLogic = new BusinessLogic();
+            //PumpStation station = businessLogic.StartAssembly("Пожаротушения", "BL_40_170-7.5_2", " ", "Горизонтальный", 2, 
+            //    54, "800х800х300", 0, 0, 16, "Нержавеющая_сталь");
+
+            //foreach (var component in station.stationComponents)
+            //{
+            //    Console.WriteLine(component.Value.ComponentsName);
+            //    Console.WriteLine(component.Value.PathToTheComponent);
+            //    Console.WriteLine("RotationByX: " + component.Value.RotationByX);
+            //    Console.WriteLine("RotationByY: " + component.Value.RotationByY);
+            //    Console.WriteLine("RotationByZ: " + component.Value.RotationByZ);
+            //    Console.WriteLine("-------------------------------" + "\n");
+            //}
+
             BusinessLogic businessLogic = new BusinessLogic();
-            PumpStation station = businessLogic.StartAssembly("Пожаротушения", "BL_40_170-7.5_2", " ", "Горизонтальный", 2, 
+            businessLogic.StartAssembly("Пожаротушения", "BL_40_170-7.5_2", " ", "Горизонтальный", 2,
                 54, "800х800х300", 0, 0, 16, "Нержавеющая_сталь");
 
-            foreach (var component in station.stationComponents)
-            {
-                Console.WriteLine(component.Value.ComponentsName);
-                Console.WriteLine(component.Value.PathToTheComponent);
-                Console.WriteLine("RotationByX: " + component.Value.RotationByX);
-                Console.WriteLine("RotationByY: " + component.Value.RotationByY);
-                Console.WriteLine("RotationByZ: " + component.Value.RotationByZ);
-                Console.WriteLine("-------------------------------" + "\n");
-            }
-
-            Console.ReadKey();
         }
     }
 }

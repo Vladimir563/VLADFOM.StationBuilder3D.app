@@ -117,15 +117,12 @@ namespace VLADFOM.StationBuilder3D.VSBuilderTestForm
 
         private void cmdAssemblyStart_Click(object sender, EventArgs e)
         {
+            this.Hide();
             BusinessLogic businessLogic = new BusinessLogic();
-            PumpStation pumpStation = businessLogic.StartAssembly(PumpStationType, PumpName, "", PumpsType, PumpsCount, WaterConsumption,
-                ControlCabinetSize, 0, 0, PresureValueForStation, CollectorsMaterial);
 
-            foreach (var component in pumpStation.stationComponents)
-            {
-                richTextBox1.Text +=  "\n"+ component.Value.ComponentsName;
-                richTextBox1.Text += "\n" + component.Value.PathToTheComponent + "\n";
-            }
+            businessLogic.StartAssembly(PumpStationType, PumpName, "", PumpsType, PumpsCount, WaterConsumption,
+                ControlCabinetSize, 0, 0, PresureValueForStation, CollectorsMaterial);
+            this.Close();
         }
     }
 }

@@ -33,10 +33,10 @@ namespace VLADFOM.StationBuilder3D.clslib
             StationScheme scheme = new StationScheme();
             scheme.stationComponents = new Dictionary<StationComponentsTypeEnum, int[]>
             {
-                { StationComponentsTypeEnum.Насос_основной, new int[]{pumpPressureConnection,pumpSuctionConnection,0,0,0}},
-                { StationComponentsTypeEnum.КЭ_катушка_эксцентрическая, new int[]{ } },
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_подводящей_линии_всасывающего_коллектора, new int[]{} },
-                { StationComponentsTypeEnum.ТВ_тройник_всасывающий,new int[]{} },
+                { StationComponentsTypeEnum.Насос_основной, new int[]{ pumpPressureConnection,pumpSuctionConnection, 0, 0, 0, 0, 0, 0, 0, 0, 0 }},
+                { StationComponentsTypeEnum.КЭ_катушка_эксцентрическая, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+                { StationComponentsTypeEnum.ЗД_затвор_дисковый_подводящей_линии_всасывающего_коллектора, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+                { StationComponentsTypeEnum.ТВ_тройник_всасывающий,new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
                 { StationComponentsTypeEnum.ЗД_затвор_дисковый_всасывающего_коллектора, new int[]{} },
                 { StationComponentsTypeEnum.КК_катушка_концентрическая, new int []{} },
                 { StationComponentsTypeEnum.ОКФ_обратный_клапан_фланцевый, new int[]{} },

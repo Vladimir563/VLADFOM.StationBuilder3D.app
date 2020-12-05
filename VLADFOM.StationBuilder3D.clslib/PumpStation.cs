@@ -276,15 +276,27 @@ namespace VLADFOM.StationBuilder3D.clslib
             {
                 if (stationComponent.StationComponentsType.Equals(componentsType.Key) && componentsType.Value.Length > 0)
                 {
-                    stationComponent.RotationByX = componentsType.Value[2];
-                    stationComponent.RotationByY = componentsType.Value[3];
-                    stationComponent.RotationByZ = componentsType.Value[4];
+                    stationComponent.RotationByX1 = componentsType.Value[2];
+                    stationComponent.RotationByX2 = componentsType.Value[3];
+                    stationComponent.RotationByX3 = componentsType.Value[4];
+                    stationComponent.RotationByY1 = componentsType.Value[5];
+                    stationComponent.RotationByY2 = componentsType.Value[6];
+                    stationComponent.RotationByY3 = componentsType.Value[7];
+                    stationComponent.RotationByZ1 = componentsType.Value[8];
+                    stationComponent.RotationByZ2 = componentsType.Value[9];
+                    stationComponent.RotationByZ3 = componentsType.Value[10];
                 }
                 else if(stationComponent.StationComponentsType.Equals(componentsType.Key))
                 {
-                    stationComponent.RotationByX = 0;
-                    stationComponent.RotationByY = 0;
-                    stationComponent.RotationByZ = 0;
+                    stationComponent.RotationByX1 = 0;
+                    stationComponent.RotationByX2 = 0;
+                    stationComponent.RotationByX3 = 0;
+                    stationComponent.RotationByY1 = 0;
+                    stationComponent.RotationByY2 = 0;
+                    stationComponent.RotationByY3 = 0;
+                    stationComponent.RotationByZ1 = 0;
+                    stationComponent.RotationByZ2 = 0;
+                    stationComponent.RotationByZ3 = 0;
                 }
             }
         }
