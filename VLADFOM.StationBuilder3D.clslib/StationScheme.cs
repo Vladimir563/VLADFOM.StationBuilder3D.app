@@ -11,13 +11,29 @@ namespace VLADFOM.StationBuilder3D.clslib
         private StationTypeEnum stationType;
 
         /// <summary>
-        /// StationComponentsTypeEnum - components type
-        /// int[0,0] - there are two component diameters you need in the array
-        /// the first value is smaller DN 
-        /// the second value is bigger DN (or the main DN for component from current form instance)
-        /// the third value is rotation by X axes
-        /// the fourth value is rotation by Y axes
-        /// the fifth value is rotation by Z axes
+        /// 
+        /// Dictionary<StationComponentsTypeEnum, int[]>
+        /// ------------------------------------------------------------------
+        /// first member is StationComponentsTypeEnum (components type)
+        /// ------------------------------------------------------------------
+        /// second member is int array[12]:
+        /// array[0] is smaller DN 
+        /// array[1] is bigger DN (or the main DN for component from current form instance)
+        /// __________________________________________________________________
+        /// array[2] is rotation by X1 axes
+        /// array[3] is rotation by X2 axes
+        /// array[4] is rotation by X3 axes
+        /// __________________________________________________________________
+        /// array[5] is rotation by Y1 axes
+        /// array[6] is rotation by Y2 axes
+        /// array[7] is rotation by Y3 axes
+        /// __________________________________________________________________
+        /// array[8] is rotation by Z1 axes
+        /// array[9] is rotation by Z2 axes
+        /// array[10] is rotation by Z3 axes
+        /// __________________________________________________________________
+        /// array[11] is component for new Line (0 equals false, 1 equals true)
+        /// 
         /// </summary>
         public Dictionary<StationComponentsTypeEnum, int[]> stationComponents = new Dictionary<StationComponentsTypeEnum, int[]>();
 
@@ -33,19 +49,19 @@ namespace VLADFOM.StationBuilder3D.clslib
             StationScheme scheme = new StationScheme();
             scheme.stationComponents = new Dictionary<StationComponentsTypeEnum, int[]>
             {
-                { StationComponentsTypeEnum.Насос_основной, new int[]{ pumpPressureConnection,pumpSuctionConnection, 0, 0, 0, 0, 0, 0, 0, 0, 0 }},
-                { StationComponentsTypeEnum.КЭ_катушка_эксцентрическая, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_подводящей_линии_всасывающего_коллектора, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
-                { StationComponentsTypeEnum.ТВ_тройник_всасывающий,new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_всасывающего_коллектора, new int[]{} },
-                { StationComponentsTypeEnum.КК_катушка_концентрическая, new int []{} },
-                { StationComponentsTypeEnum.ОКФ_обратный_клапан_фланцевый, new int[]{} },
-                { StationComponentsTypeEnum.КР_катушка_резьбовая,new int[]{} },
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_подводящей_линии_напорного_коллектора, new int[]{} },
-                { StationComponentsTypeEnum.ТН_тройник_напорный, new int[]{} },
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_напорного_коллектора, new int[]{} },
-                { StationComponentsTypeEnum.Рама_, new int[]{} },
-                { StationComponentsTypeEnum.ШУ_, new int[]{} }
+                { StationComponentsTypeEnum.Насос_основной, new int[]{ pumpPressureConnection,pumpSuctionConnection, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0}},
+                { StationComponentsTypeEnum.КЭ_катушка_эксцентрическая, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+                { StationComponentsTypeEnum.ЗД_затвор_дисковый_подводящей_линии_всасывающего_коллектора, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+                { StationComponentsTypeEnum.ТВ_тройник_всасывающий,new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+                { StationComponentsTypeEnum.ЗД_затвор_дисковый_всасывающего_коллектора, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+                { StationComponentsTypeEnum.КК_катушка_концентрическая, new int []{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1} },
+                { StationComponentsTypeEnum.ОКФ_обратный_клапан_фланцевый, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+                { StationComponentsTypeEnum.КР_катушка_резьбовая,new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+                { StationComponentsTypeEnum.ЗД_затвор_дисковый_подводящей_линии_напорного_коллектора, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0} },
+                { StationComponentsTypeEnum.ТН_тройник_напорный, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+                { StationComponentsTypeEnum.ЗД_затвор_дисковый_напорного_коллектора, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+                { StationComponentsTypeEnum.Рама_, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+                { StationComponentsTypeEnum.ШУ_, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } }
             };
             return scheme;
         }

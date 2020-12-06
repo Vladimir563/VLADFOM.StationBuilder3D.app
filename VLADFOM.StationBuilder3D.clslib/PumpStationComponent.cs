@@ -21,6 +21,8 @@ namespace VLADFOM.StationBuilder3D.clslib
         private int rotationByZ1;
         private int rotationByZ2;
         private int rotationByZ3;
+        private int isComponentForNewLine;
+
 
         private PumpStation pumpStation;
         public string ComponentsName
@@ -87,6 +89,11 @@ namespace VLADFOM.StationBuilder3D.clslib
         {
             get { return rotationByZ3; }
             set { rotationByZ3 = value; }
+        }
+        public int IsComponentForNewLine
+        {
+            get { return isComponentForNewLine; }
+            set { isComponentForNewLine = value; }
         }
 
         public PumpStation PumpStation

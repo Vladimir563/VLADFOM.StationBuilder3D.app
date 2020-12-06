@@ -85,7 +85,7 @@ namespace BBtest3D
 
             BusinessLogic businessLogic = new BusinessLogic();
             businessLogic.StartAssembly("Пожаротушения", "BL_40_170-7.5_2", " ", "Горизонтальный", 2,
-                54, "800х800х300", 0, 0, 16, "Нержавеющая_сталь");
+                32, "800х800х300", 0, 0, 16, "Нержавеющая_сталь");
 
         }
     }

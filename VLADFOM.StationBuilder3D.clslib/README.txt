@@ -1,6 +1,6 @@
-﻿1) To make a choice pump station method components creating (AutoCreating or Creating with your hands)
+﻿"Пл_вх" - the plane shows enter for water's thread
+"Пл_Вых" - - the plane shows exit for water's thread
 
-2) To create Scheme instance and initialize when created
-
-3) To create PumpStation instance
+"Ось_Вх" - the axis shows enter for water's thread
+"Ось_Вых" - the axis shows exit for water's thread
 

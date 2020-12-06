@@ -285,6 +285,7 @@ namespace VLADFOM.StationBuilder3D.clslib
                     stationComponent.RotationByZ1 = componentsType.Value[8];
                     stationComponent.RotationByZ2 = componentsType.Value[9];
                     stationComponent.RotationByZ3 = componentsType.Value[10];
+                    stationComponent.IsComponentForNewLine = componentsType.Value[11];
                 }
                 else if(stationComponent.StationComponentsType.Equals(componentsType.Key))
                 {
@@ -297,6 +298,7 @@ namespace VLADFOM.StationBuilder3D.clslib
                     stationComponent.RotationByZ1 = 0;
                     stationComponent.RotationByZ2 = 0;
                     stationComponent.RotationByZ3 = 0;
+                    stationComponent.IsComponentForNewLine = 0;
                 }
             }
         }
