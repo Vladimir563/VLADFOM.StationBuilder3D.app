@@ -10,6 +10,8 @@ namespace VLADFOM.StationBuilder3D.clslib
 {
     public class PumpStation
     {
+        public Pump mainPump;
+        public Pump jockeyPump;
         private int pumpsCount;
         private double waterConsumption;
         private int dnSuctionCollector;
@@ -18,13 +20,10 @@ namespace VLADFOM.StationBuilder3D.clslib
         private double pressureValueForStation;
         private CollectorsMaterialEnum collectorsMaterial;
         private StationScheme stationScheme;
-        private Pump pump;
-        private string mainPumpsName;
-        private string jockeyPumpsName;
         private string controlCabinetsSize;
         private bool isAutoCalculationDiameterConnection;
         private int distanceBetweenAxis;
-        public Dictionary<string, string> componentsLocationPaths = new Dictionary<string, string>();
+        public ComponentsLocationPaths componentsLocation;
         public Dictionary<StationComponentsTypeEnum, PumpStationComponent> stationComponents = new Dictionary<StationComponentsTypeEnum, PumpStationComponent>();
 
         public int PumpsCount
@@ -83,21 +82,6 @@ namespace VLADFOM.StationBuilder3D.clslib
             get { return stationScheme; }
             set { stationScheme = value; }
         }
-        public Pump Pump
-        {
-            get { return pump; }
-            set { pump = value; }
-        }
-        public string MainPumpsName
-        {
-            get { return mainPumpsName; }
-            set { mainPumpsName = value; }
-        }
-        public string JockeyPumpsName
-        {
-            get { return jockeyPumpsName; }
-            set { jockeyPumpsName = value; }
-        }
         public string ControlCabinetsSize
         {
             get { return controlCabinetsSize; }
@@ -119,13 +103,14 @@ namespace VLADFOM.StationBuilder3D.clslib
             set { distanceBetweenAxis = value; }
         }
 
-        public PumpStation(string _mainPumpsName, string _jockeyPumpsName, string _controlCabinetsName, 
+        public PumpStation( ComponentsLocationPaths _componentsLocation, Pump _mainPump, Pump _jockeyPump, string _controlCabinetsName, 
             bool _isAutoCalculationDiameterConnection, int _pumpsCount, double _waterConsumption, int _dnSuctionCollector, 
             int _dnPressureCollector, double _pressureValueForStation, CollectorsMaterialEnum _collectorsMaterial, 
             StationScheme _stationScheme)
         {
-            MainPumpsName = _mainPumpsName;
-            JockeyPumpsName = _jockeyPumpsName;
+            componentsLocation = _componentsLocation;
+            mainPump = _mainPump;
+            jockeyPump = _jockeyPump;
             ControlCabinetsSize = _controlCabinetsName;
             IsAutoCalculationDiameterConnection = _isAutoCalculationDiameterConnection;
             PumpsCount = _pumpsCount;
@@ -136,8 +121,8 @@ namespace VLADFOM.StationBuilder3D.clslib
             CollectorsMaterial = _collectorsMaterial;
             StationScheme = _stationScheme;
             SecondaryLineDn = GetSecondaryLineDn(DnSuctionCollector);
+            DistanceBetweenAxis = ComponentsValCalculator.GetDistanceBetweenPumpsAxis(mainPump.PumpsWidth);
 
-            componentsLocationPaths = PathsInitialize(componentsLocationPaths);
             CreatePumpStationComponentsByScheme(StationScheme);
         }
 
@@ -159,16 +144,14 @@ namespace VLADFOM.StationBuilder3D.clslib
 
                 if (componentsType.Key.Equals(StationComponentsTypeEnum.Насос_основной))
                 {
-                    Pump stationPump = new Pump(this, componentsType.Value[0], componentsType.Value[1],
-                        StationComponentsTypeEnum.Насос_основной, MainPumpsName);
+                    Pump stationPump = mainPump;
                     StationComponentInitialize(stationPump, stationScheme);
                     stationComponents.Add(componentsType.Key, stationPump);
 
                 }
                 else if (componentsType.Equals(StationComponentsTypeEnum.Насос_жокей))
                 {
-                    Pump stationJockeyPump = new Pump(this, componentsType.Value[0], componentsType.Value[1],
-                        StationComponentsTypeEnum.Насос_жокей, JockeyPumpsName);
+                    Pump stationJockeyPump = jockeyPump;
                     StationComponentInitialize(stationJockeyPump, stationScheme);
                     stationComponents.Add(componentsType.Key, stationJockeyPump);
                 }
@@ -209,67 +192,6 @@ namespace VLADFOM.StationBuilder3D.clslib
             }
         }
 
-        public Dictionary<string,string> PathsInitialize (Dictionary<string,string> componentsLocationPaths) 
-        {
-            string[] pathNames = { 
-
-                "mainDirPath", 
-                "pumpsPath",
-                "mainPumpsPath",
-                "jockeyPumpsPath",
-                "controlCabinetsPath",
-                "lockValvesPath",
-                "shuttersPath",
-                "carvesValvesPath",
-                "checkValvesPath",
-                "flangeCheckValvesPath",
-                "carveCheckValvesPath",
-                "collectorsPath",
-                "pressureCollectorsPath",
-                "suctionCollectorsPath",
-                "teesPath",
-                "suctionTeesPath",
-                "pressureTeesPath",
-                "coilsPath",
-                "concentricCoilsPath",
-                "concentricCoilsWithNippelPath",
-                "essentricCoilsPath",
-                "essentricCoilsPathWithNippel",
-                "simpleCoilsPath",
-                "simpleCoilsWithNippelPath",
-                "jockeySuctionCoils",
-                "jockeyPressureCoils",
-                "framesPath",
-                "weldedFramesPath",
-                "framesFromShvellerPath",
-                "flangesWithReley"
-            };
-
-            XmlNode attr;
-
-            XmlDocument xDoc = new XmlDocument();
-
-            var xmlSettingsLocation = Path.Combine(Path.GetDirectoryName(typeof(PumpStation).Assembly.CodeBase).Replace(@"file:\", string.Empty).Replace(@"bin\", string.Empty).Replace(@"Debug", string.Empty), "PARTS_PATHS.xml");
-
-            xDoc.Load(xmlSettingsLocation);
-
-            // get the root element
-            XmlElement xRoot = xDoc.DocumentElement;
-
-            foreach (XmlNode node in xRoot)
-            {
-                for (int i = 0; i < pathNames.Length; i++)
-                {
-                    if (node.Name.Equals(pathNames[i]))
-                    {
-                        attr = node.Attributes.GetNamedItem("name");
-                        componentsLocationPaths.Add(pathNames[i],attr.Value);
-                    }
-                }
-            }
-            return componentsLocationPaths;
-        }
-
         public void StationComponentInitialize(PumpStationComponent stationComponent, StationScheme stationScheme) 
         {
             foreach (var componentsType in stationScheme.stationComponents)
@@ -285,7 +207,7 @@ namespace VLADFOM.StationBuilder3D.clslib
                     stationComponent.RotationByZ1 = componentsType.Value[8];
                     stationComponent.RotationByZ2 = componentsType.Value[9];
                     stationComponent.RotationByZ3 = componentsType.Value[10];
-                    stationComponent.IsComponentForNewLine = componentsType.Value[11];
+                    stationComponent.IsComponentForTheNewLine = componentsType.Value[11];
                 }
                 else if(stationComponent.StationComponentsType.Equals(componentsType.Key))
                 {
@@ -298,7 +220,7 @@ namespace VLADFOM.StationBuilder3D.clslib
                     stationComponent.RotationByZ1 = 0;
                     stationComponent.RotationByZ2 = 0;
                     stationComponent.RotationByZ3 = 0;
-                    stationComponent.IsComponentForNewLine = 0;
+                    stationComponent.IsComponentForTheNewLine = 0;
                 }
             }
         }

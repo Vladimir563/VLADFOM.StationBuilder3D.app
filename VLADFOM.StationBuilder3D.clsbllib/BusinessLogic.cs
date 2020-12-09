@@ -34,6 +34,7 @@ namespace VLADFOM.StationBuilder3D.clsbllib
         private Feature matefeature;
         private int mateError;
         bool isPressureLineBuilding;
+        bool isComponentsPlanesReverseMate;
         bool isAssemblyBuildingContinue = true;
         int indexOfPumpsStationComponentsArray = 0;
         #endregion
@@ -42,19 +43,41 @@ namespace VLADFOM.StationBuilder3D.clsbllib
             int pumpsCount, double waterConsumption, string controlCabinetsName, int dnSuctionCollector, int dnPressureCollector, 
             int pressureValueForStation, string collectorsMaterialTypeString)
         {
-            #region Itialization
+            #region Initialization
             //gets pumps connection from DB (when pump was added in data base successfully)
-            int dnPumpsPressureConnection = 40; //gets it from DB
-            int dnPumpsSuctionConnection = 50; //gets it from DB
+
+            //инициализируем пути из xml
+            ComponentsLocationPaths locationPaths = new ComponentsLocationPaths();
+
+            //создаем обьекты насосов (главный, жокей) все данные для создание обьектов берем из ДБ 
+            //(в которую будут заноситься все данные из модели при валидации)
+            Pump mainPump = new Pump(locationPaths, pumpsName, 0, 0, 0, StationComponentsTypeEnum.Насос_основной);
+            Pump jockeyPump = new Pump(locationPaths, "", 0, 0, 0, StationComponentsTypeEnum.Насос_жокей);
+            //getting all properties of pump we need from db
+            #region For test
+            //taking all these propeties form pumps DB (they will be available after pump's validation process and addition in database)
+            mainPump.ComponentsWeight = 210;
+            mainPump.PumpsWidth = 300;
+            mainPump.PressureSideDn = 40;
+            mainPump.SuctionSideDn = 50;
+
+            jockeyPump.ComponentsWeight = 50;
+            jockeyPump.PressureSideDn = 2;
+            jockeyPump.SuctionSideDn = 2;
+            #endregion
+
 
             StationScheme currentScheme = GetStationSchemeByTypeValue(pumpStationType, pumpsCount, pumpsType,
-                dnPumpsPressureConnection, dnPumpsSuctionConnection);
-            currentScheme.StationType = GetStationTypeEnumByTypesValue(pumpStationType);
+                mainPump.PressureSideDn, mainPump.SuctionSideDn);
 
-            PumpStation pumpStation = new PumpStation(pumpsName, jockeyPumpsName, controlCabinetsName, true, pumpsCount,
+            currentScheme.StationType = GetStationTypeEnumByTypeValue(pumpStationType);
+
+
+            PumpStation pumpStation = new PumpStation( locationPaths, mainPump, jockeyPump, controlCabinetsName, true, pumpsCount,
                 waterConsumption, dnSuctionCollector, dnPressureCollector, pressureValueForStation,
                 GetCollectorsMaterialEnumByTypesValue(collectorsMaterialTypeString), currentScheme);
-            #endregion
+            #endregion      
+
 
             //getting the SldWorks current instance
             swApp = (SldWorks)Activator.CreateInstance(Type.GetTypeFromProgID("SldWorks.Application"));
@@ -73,25 +96,46 @@ namespace VLADFOM.StationBuilder3D.clsbllib
                 stationComponents[indexOfPumpsStationComponentsArray++] = component;
             }
 
+
+            foreach (var component in stationComponents)
+            {
+                Console.WriteLine(component.ComponentsName);
+                Console.WriteLine(component.PathToTheComponent);
+                Console.WriteLine("----------------------------");
+            }
+
+
             for (int i = 0; i < stationComponents.Length; i++)
             {
-                if (isAssemblyBuildingContinue) 
+
+                if (!isAssemblyBuildingContinue) return;
+
+                InsertStationComponentInAssemly(stationComponents[i]);
+
+                try
                 {
-                    InsertStationComponentInAssemly(stationComponents[i]);
-                    try
+                    isPressureLineBuilding = stationComponents[i].IsComponentForTheNewLine.Equals(2) ? true : false;
+                    isComponentsPlanesReverseMate = stationComponents[i].IsComponentForTheNewLine.Equals(1) ? true : false;
+                    if (!isAssemblyBuildingContinue) return;
+
+                    if (isPressureLineBuilding)
                     {
-                        //сделать тернарным оператором проверку идет идет ли построение напорной линии для isPressureLineBuilding
-                        CreateCoincidentMateForComponentsPlanes(stationComponents[i - 1], stationComponents[i], isPressureLineBuilding);
-                        CreateCoincidentMateForComponentsAxis(stationComponents[i - 1], stationComponents[i], isPressureLineBuilding);
+                        CreateCoincidentMateForComponentsPlanes(stationComponents[0], stationComponents[i], true);
+                        CreateCoincidentMateForComponentsAxis(stationComponents[0], stationComponents[i], true);
+                        continue;
                     }
-                    catch (Exception e)
-                    { Debug.Print(e.Message); }
-                }  
+
+                    CreateCoincidentMateForComponentsPlanes(stationComponents[i - 1], stationComponents[i], isComponentsPlanesReverseMate);
+                    CreateCoincidentMateForComponentsAxis(stationComponents[i - 1], stationComponents[i], isComponentsPlanesReverseMate);
+                }
+                catch (Exception e)
+                { Debug.Print(e.Message); }
+                
             }
         }
 
         #region UsefulMethods
-        public StationTypeEnum GetStationTypeEnumByTypesValue(string typeValueString)
+        public StationTypeEnum GetStationTypeEnumByTypeValue(string typeValueString)
         {
             if (typeValueString.Equals(StationTypeEnum.Пожаротушения.ToString()))
             {
@@ -156,7 +200,7 @@ namespace VLADFOM.StationBuilder3D.clsbllib
 
         public void InsertStationComponentInAssemly(PumpStationComponent stationComponent) 
         {
-            ////open part component
+            //open part component
             swModel = (ModelDoc2)swApp.OpenDoc6(stationComponent.PathToTheComponent, (int)swDocumentTypes_e.swDocPART, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", ref errors, ref warnings);
             swApp.ActivateDoc2(stationComponent.ComponentsName + ".sldprt", false, ref errors);
 
@@ -165,21 +209,23 @@ namespace VLADFOM.StationBuilder3D.clsbllib
             {
                 MessageBox.Show($"Компонент {stationComponent.ComponentsName} отсутствует в базе (приложение будет закрыто)", "Ошибка доступа", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 isAssemblyBuildingContinue = false;
+                swApp.CloseDoc(AssemblyTitle);
                 return;
             }
 
             //Add the part to the assembly
             swInsertedComponent = (Component2)swAssembly.AddComponent5(stationComponent.PathToTheComponent, (int)swAddComponentConfigOptions_e.swAddComponentConfigOptions_CurrentSelectedConfig, "", false, "", -0.000181145833835217, 0.000107469465717713, 2.25750183631135E-05);
+            stationComponent.NameInAssebmly = swInsertedComponent.Name2;
             swApp.CloseDoc(stationComponent.PathToTheComponent);
-            TransformData[0] = 1;
-            TransformData[1] = 0;
-            TransformData[2] = 0;
-            TransformData[3] = 0;
-            TransformData[4] = 1;
-            TransformData[5] = 0;
-            TransformData[6] = 0;
-            TransformData[7] = 0;
-            TransformData[8] = 1;
+            TransformData[0] = stationComponent.RotationByX1;
+            TransformData[1] = stationComponent.RotationByX2;
+            TransformData[2] = stationComponent.RotationByX3;
+            TransformData[3] = stationComponent.RotationByY1;
+            TransformData[4] = stationComponent.RotationByY2;
+            TransformData[5] = stationComponent.RotationByY3;
+            TransformData[6] = stationComponent.RotationByZ1;
+            TransformData[7] = stationComponent.RotationByZ2;
+            TransformData[8] = stationComponent.RotationByZ3;
             TransformData[9] = 0;
             TransformData[10] = 0;
             TransformData[11] = 0;
@@ -204,10 +250,12 @@ namespace VLADFOM.StationBuilder3D.clsbllib
             string MateName;
             string FirstSelection;
             string SecondSelection;
+            string line1PlaneName = _isPressureLineBuilding ? "Пл_Вых@" : "Пл_Вх@";
+            string line2PlaneName = _isPressureLineBuilding ? "Пл_Вх@" : "Пл_Вых@";
 
-            MateName = "coinc_matePlains_" + stationComponent1.ComponentsName + "_" + stationComponent2.ComponentsName;
-            FirstSelection = _isPressureLineBuilding ? "Пл_Вых@" : "Пл_Вх@" + stationComponent1.ComponentsName + "-1" + "@" + AssemblyTitle;
-            SecondSelection = _isPressureLineBuilding ? "Пл_Вх@" : "Пл_Вых@" + stationComponent2.ComponentsName + "-1" + "@" + AssemblyTitle;
+            MateName = "coinc_matePlains_" + stationComponent1.NameInAssebmly + "_" + stationComponent2.NameInAssebmly;
+            FirstSelection = line1PlaneName + stationComponent1.NameInAssebmly + "@" + AssemblyTitle;
+            SecondSelection = line2PlaneName + stationComponent2.NameInAssebmly + "@" + AssemblyTitle;
 
             swModel.ClearSelection2(true);
             swDocExt = (ModelDocExtension)swModel.Extension;
@@ -233,10 +281,12 @@ namespace VLADFOM.StationBuilder3D.clsbllib
             string MateName;
             string FirstSelection;
             string SecondSelection;
+            string line1AxisName = _isPressureLineBuilding ? "Ось_Вых@" : "Ось_Вх@";
+            string line2AxisName = _isPressureLineBuilding ? "Ось_Вх@" : "Ось_Вых@";
 
-            MateName = "coinc_mateAxis_" + stationComponent1.ComponentsName + "_" + stationComponent2.ComponentsName;
-            FirstSelection = _isPressureLineBuilding ? "Ось_Вых@" : "Ось_Вх@" + stationComponent1.ComponentsName + "-1" + "@" + AssemblyTitle;
-            SecondSelection = _isPressureLineBuilding ? "Ось_Вх@" : "Ось_Вых@" + stationComponent2.ComponentsName + "-1" + "@" + AssemblyTitle;
+            MateName = "coinc_mateAxis_" + stationComponent1.NameInAssebmly + "_" + stationComponent2.ComponentsName;
+            FirstSelection = line1AxisName + stationComponent1.NameInAssebmly + "@" + AssemblyTitle;
+            SecondSelection = line2AxisName + stationComponent2.NameInAssebmly + "@" + AssemblyTitle;
 
             swModel.ClearSelection2(true);
             swDocExt = (ModelDocExtension)swModel.Extension;

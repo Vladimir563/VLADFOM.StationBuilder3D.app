@@ -4,8 +4,6 @@
   <mainDirPath name ="D:\StationBuilder3D_база_моделей\"></mainDirPath>
   
   <pumpsPath name ="Насосы\"></pumpsPath>
-  <mainPumpsPath name ="Основные\"></mainPumpsPath> 
-  <jockeyPumpsPath name ="Жокей-насосы\"></jockeyPumpsPath>
 
   <controlCabinetsPath name ="Шкафы_Управления\"></controlCabinetsPath> 
 

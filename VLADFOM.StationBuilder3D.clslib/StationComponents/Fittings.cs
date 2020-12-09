@@ -9,7 +9,7 @@ namespace VLADFOM.StationBuilder3D.clslib
     public class Fittings : PumpStationComponent, IStationComponentInitiable
     {
         public Fittings(PumpStation _pumpStation, StationComponentsTypeEnum _stationComponentsType) 
-            : base(_pumpStation,_stationComponentsType)
+            : base(_pumpStation, _stationComponentsType)
         {
             if (PumpStation.IsAutoCalculationDiameterConnection) 
             {
@@ -17,7 +17,7 @@ namespace VLADFOM.StationBuilder3D.clslib
             }
             else this.ComponentsName = ComponentsNameGenerate(PumpStation);
 
-            PathToTheComponent = ComponentsValCalculator.GetFullPathToTheComponent(PumpStation, this);
+            PathToTheComponent = ComponentsValCalculator.GetFullPathToTheComponent(_pumpStation.componentsLocation, this);
         }
 
         public virtual string ComponentsNameAutoGenerate(PumpStation pumpStation, int pumpsSuctionLineConnectionDn, int pumpsPressureLineConnectionDn)
@@ -35,7 +35,7 @@ namespace VLADFOM.StationBuilder3D.clslib
             }
             else if (this.StationComponentsType.Equals(StationComponentsTypeEnum.ФланецСРеле_))
             {
-                return $"{s1[0]}_DN{pumpStation.Pump.PressureSideDn}";
+                return $"{s1[0]}_DN{pumpStation.mainPump.PressureSideDn}";
             }
             return $"{s1[0]}_DN{pumpStation.SecondaryLineDn}";
         }

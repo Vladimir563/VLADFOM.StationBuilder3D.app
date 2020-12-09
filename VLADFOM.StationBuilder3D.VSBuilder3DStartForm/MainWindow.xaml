@@ -1,0 +1,51 @@
+﻿<Window x:Name="SB3DAutoAssemblyModeForm" x:Class="VLADFOM.StationBuilder3D.VSBuilder3DStartForm.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VLADFOM.StationBuilder3D.VSBuilder3DStartForm"
+        mc:Ignorable="d"
+        Title="SB3D &quot;Режим автоматической сборки&quot;" Height="600" Width="400" WindowStartupLocation="CenterScreen" Topmost="True" ResizeMode="CanMinimize" TabIndex="1" AutomationProperties.Name="SB3DAutoAssemblyModeForm">
+    <Grid>
+        <Label x:Name="PumpStationTypeTextBox" Content="Тип установки" HorizontalAlignment="Left" Margin="20,30,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="comboBoxPumpStationType" HorizontalAlignment="Left" Margin="170,30,0,0" VerticalAlignment="Top" Width="200" AutomationProperties.Name="comboBoxPumpStationType" TabIndex="2">
+            <ComboBoxItem Content="Пожаротушения" IsSelected="True" TabIndex="3" >
+                <ComboBoxItem.ToolTip>
+                    <ToolTip Width="200" Height="150">
+                        <Image Source="/nasos_1.gif"/>
+                    </ToolTip>
+                </ComboBoxItem.ToolTip>
+            </ComboBoxItem>
+            <ComboBoxItem Content="Повышения давления">
+                <ComboBoxItem.ToolTip>
+                    <ToolTip Width="200" Height="150">
+                        <Image Source="/nasos_1.gif"/>
+                    </ToolTip>
+                </ComboBoxItem.ToolTip>
+            </ComboBoxItem>
+            <ComboBoxItem Content="Совмещённая ХП и ПЖ">
+                <ComboBoxItem.ToolTip>
+                    <ToolTip Width="200" Height="150">
+                        <Image Source="/nasos_1.gif"/>
+                    </ToolTip>
+                </ComboBoxItem.ToolTip>
+            </ComboBoxItem>
+            <ComboBoxItem Content="Мультидрайв">
+                <ComboBoxItem.ToolTip>
+                    <ToolTip Width="200" Height="150">
+                        <Image Source="/nasos_1.gif"/>
+                    </ToolTip>
+                </ComboBoxItem.ToolTip>
+            </ComboBoxItem>
+            <ComboBoxItem Content="Ф-Драйв">
+                <ComboBoxItem.ToolTip>
+                    <ToolTip Width="200" Height="150">
+                        <Image Source="/nasos_1.gif"/>
+                    </ToolTip>
+                </ComboBoxItem.ToolTip>
+            </ComboBoxItem>
+        </ComboBox>
+        <Label x:Name="label" Content="Наименование насоса" HorizontalAlignment="Left" Margin="20,60,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="170,60,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200"/>
+    </Grid>
+</Window>

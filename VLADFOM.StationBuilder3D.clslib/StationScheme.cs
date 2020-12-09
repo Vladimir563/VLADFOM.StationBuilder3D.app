@@ -17,8 +17,8 @@ namespace VLADFOM.StationBuilder3D.clslib
         /// first member is StationComponentsTypeEnum (components type)
         /// ------------------------------------------------------------------
         /// second member is int array[12]:
-        /// array[0] is smaller DN 
-        /// array[1] is bigger DN (or the main DN for component from current form instance)
+        /// array[0] is the smaller DN 
+        /// array[1] is the bigger DN (or the main DN for component from current form instance)
         /// __________________________________________________________________
         /// array[2] is rotation by X1 axes
         /// array[3] is rotation by X2 axes
@@ -32,7 +32,7 @@ namespace VLADFOM.StationBuilder3D.clslib
         /// array[9] is rotation by Z2 axes
         /// array[10] is rotation by Z3 axes
         /// __________________________________________________________________
-        /// array[11] is component for new Line (0 equals false, 1 equals true)
+        /// array[11] is the component for the new Line (0 equals false, 1 equals true (reverse planes), 2 start new line)
         /// 
         /// </summary>
         public Dictionary<StationComponentsTypeEnum, int[]> stationComponents = new Dictionary<StationComponentsTypeEnum, int[]>();
@@ -49,19 +49,19 @@ namespace VLADFOM.StationBuilder3D.clslib
             StationScheme scheme = new StationScheme();
             scheme.stationComponents = new Dictionary<StationComponentsTypeEnum, int[]>
             {
-                { StationComponentsTypeEnum.Насос_основной, new int[]{ pumpPressureConnection,pumpSuctionConnection, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0}},
-                { StationComponentsTypeEnum.КЭ_катушка_эксцентрическая, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_подводящей_линии_всасывающего_коллектора, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
-                { StationComponentsTypeEnum.ТВ_тройник_всасывающий,new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_всасывающего_коллектора, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
-                { StationComponentsTypeEnum.КК_катушка_концентрическая, new int []{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1} },
-                { StationComponentsTypeEnum.ОКФ_обратный_клапан_фланцевый, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
-                { StationComponentsTypeEnum.КР_катушка_резьбовая,new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_подводящей_линии_напорного_коллектора, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0} },
-                { StationComponentsTypeEnum.ТН_тройник_напорный, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_напорного_коллектора, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+                { StationComponentsTypeEnum.Насос_основной, new int[]{ pumpPressureConnection,pumpSuctionConnection, 1, 0, 0, 0, 1, 0, 0, 0, 1 ,0}},
+                { StationComponentsTypeEnum.КЭ_катушка_эксцентрическая, new int[]{ 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0} },
+                { StationComponentsTypeEnum.ЗД_затвор_дисковый_подводящей_линии_всасывающего_коллектора, new int[]{ 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0} },
+                { StationComponentsTypeEnum.ТВ_тройник_всасывающий,new int[]{ 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0} },
+                { StationComponentsTypeEnum.ЗД_затвор_дисковый_всасывающего_коллектора, new int[]{ 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0 } },
+                { StationComponentsTypeEnum.КК_катушка_концентрическая, new int []{ 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 2} },
+                { StationComponentsTypeEnum.ОКФ_обратный_клапан_фланцевый, new int[]{ 0, 0, 1, 0, 0, 0, 0, -1, 0, 1, 0, 1} },
+                { StationComponentsTypeEnum.КР_катушка_резьбовая,new int[]{ 0, 0, 0, 0, -1, 1, 0, 0, 0, -1, 0, 1 } },
+                { StationComponentsTypeEnum.ЗД_затвор_дисковый_подводящей_линии_напорного_коллектора, new int[]{ 0, 0, 0, 0, -1, 1, 0, 0, 0, -1, 0 ,1} },
+                { StationComponentsTypeEnum.ТН_тройник_напорный, new int[]{ 0, 0, 1, 0, 0, 0, 0, -1, 0, 1, 0, 1 } },
+                { StationComponentsTypeEnum.ЗД_затвор_дисковый_напорного_коллектора, new int[]{ 0, 0, 0, 0, -1, 0, -1, 0, -1, 0, 0, 1 } },
                 { StationComponentsTypeEnum.Рама_, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
-                { StationComponentsTypeEnum.ШУ_, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } }
+                { StationComponentsTypeEnum.ШУ_, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } }
             };
             return scheme;
         }

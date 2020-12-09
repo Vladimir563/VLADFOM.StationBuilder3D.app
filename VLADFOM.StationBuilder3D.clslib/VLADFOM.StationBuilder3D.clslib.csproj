@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComponentsLocationPaths.cs" />
     <Compile Include="ComponentsValCalculator.cs" />
     <Compile Include="StationComponents\ControlCabinet.cs" />
     <Compile Include="StationComponents\Fittings.cs" />

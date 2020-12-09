@@ -125,7 +125,7 @@ namespace VLADFOM.StationBuilder3D.clslib
 
         public static string GetFramesFullName(PumpStation _pumpStation)
         {
-            if (GetFrameTypeByPumpsWeight(_pumpStation.Pump.ComponentsWeight).Equals(FrameTypesEnum.StandartRottenFrame))
+            if (GetFrameTypeByPumpsWeight(_pumpStation.mainPump.ComponentsWeight).Equals(FrameTypesEnum.StandartRottenFrame))
             {
                 string rottenFrameSize = string.Empty;
                 if (_pumpStation.DistanceBetweenAxis == 300)
@@ -166,7 +166,7 @@ namespace VLADFOM.StationBuilder3D.clslib
                 return $"Рама_гнутая_{rottenFrameSize}";
             }
 
-            return $"Рама_швеллер_{(int)ComponentsValCalculator.GetFrameTypeByPumpsWeight(_pumpStation.Pump.ComponentsWeight)}П";
+            return $"Рама_швеллер_{(int)ComponentsValCalculator.GetFrameTypeByPumpsWeight(_pumpStation.mainPump.ComponentsWeight)}П";
         }
 
         public static int GetStationConnectionDnByConsumption(double consumption )
@@ -215,82 +215,91 @@ namespace VLADFOM.StationBuilder3D.clslib
             return 0;
         }
 
-        public static string GetFullPathToTheComponent(PumpStation station, PumpStationComponent component) 
+        public static string GetFullPathToTheComponent(ComponentsLocationPaths componentsLocation, 
+            PumpStationComponent component) 
         {
-            return String.Format(station.componentsLocationPaths["mainDirPath"] + 
-            GetComponentsPathByType(station, component) + component.ComponentsName + ".SLDPRT");
+            return String.Format(componentsLocation.componentsLocationPaths["mainDirPath"] + 
+            GetComponentsPathByType(componentsLocation, component) + component.ComponentsName + ".SLDPRT");
         }
 
-        public static string GetComponentsPathByType(PumpStation station, PumpStationComponent component) 
+        public static string GetFullPathToTheComponent(ComponentsLocationPaths componentsLocation, string pumpName,
+    PumpStationComponent component)
+        {
+            return String.Format(componentsLocation.componentsLocationPaths["mainDirPath"] +
+            GetComponentsPathByType(componentsLocation, pumpName, component) + component.ComponentsName + ".SLDPRT");
+        }
+
+        public static string GetComponentsPathByType(ComponentsLocationPaths componentsLocation, string pumpName, PumpStationComponent component) 
+        {
+            string[] startMainPumpsNameChars = pumpName.Split('_');
+            return componentsLocation.componentsLocationPaths["pumpsPath"] + startMainPumpsNameChars[0] + @"\";
+
+        }
+
+        public static string GetComponentsPathByType(ComponentsLocationPaths componentsLocation, PumpStationComponent component) 
         {
             string[] s1 = component.StationComponentsType.ToString().Split('_');
-
-            if (s1[0].Equals("Насос"))
+            
+            if (s1[0].Equals("КВ") || s1[0].Equals("КН"))
             {
-                string [] startPumpsNameChars = station.Pump.ComponentsName.Split('_');
-                return station.componentsLocationPaths["pumpsPath"] + (component.StationComponentsType.Equals(StationComponentsTypeEnum.Насос_основной)
-                    ? station.componentsLocationPaths["mainPumpsPath"] : station.componentsLocationPaths["jockeyPumpsPath"]) + startPumpsNameChars[0] + @"\";
-            }
-            else if (s1[0].Equals("КВ") || s1[0].Equals("КН"))
-            {
-                return station.componentsLocationPaths["collectorsPath"] + (component.StationComponentsType.Equals(StationComponentsTypeEnum.КВ_коллектор_всасывающий)
-                    ? station.componentsLocationPaths["suctionCollectorsPath"] : station.componentsLocationPaths["pressureCollectorsPath"]);
+                return componentsLocation.componentsLocationPaths["collectorsPath"] + (component.StationComponentsType.Equals(StationComponentsTypeEnum.КВ_коллектор_всасывающий)
+                    ? componentsLocation.componentsLocationPaths["suctionCollectorsPath"] : componentsLocation.componentsLocationPaths["pressureCollectorsPath"]);
             }
             else if (s1[0].Equals("ОКФ") || s1[0].Equals("ОКР"))
             {
-                return station.componentsLocationPaths["checkValvesPath"] + (component.StationComponentsType.Equals(StationComponentsTypeEnum.ОКФ_обратный_клапан_фланцевый)
-                    ? station.componentsLocationPaths["flangeCheckValvesPath"] : station.componentsLocationPaths["carveCheckValvesPath"]);
+                return componentsLocation.componentsLocationPaths["checkValvesPath"] + (component.StationComponentsType.Equals(StationComponentsTypeEnum.ОКФ_обратный_клапан_фланцевый)
+                    ? componentsLocation.componentsLocationPaths["flangeCheckValvesPath"] : componentsLocation.componentsLocationPaths["carveCheckValvesPath"]);
             }
             else if (s1[0].Equals("ЗД") || s1[0].Equals("РК"))
             {
-                return station.componentsLocationPaths["lockValvesPath"] + (component.StationComponentsType.Equals(StationComponentsTypeEnum.РК_резьбовой_кран)
-                    ? station.componentsLocationPaths["carvesValvesPath"] : station.componentsLocationPaths["shuttersPath"]);
+                return componentsLocation.componentsLocationPaths["lockValvesPath"] + (component.StationComponentsType.Equals(StationComponentsTypeEnum.РК_резьбовой_кран)
+                    ? componentsLocation.componentsLocationPaths["carvesValvesPath"] : componentsLocation.componentsLocationPaths["shuttersPath"]);
             }
             else if (s1[0].Equals("ТВ") || s1[0].Equals("ТН"))
             {
-                return station.componentsLocationPaths["teesPath"] + (component.StationComponentsType.Equals(StationComponentsTypeEnum.ТВ_тройник_всасывающий)
-                    ? station.componentsLocationPaths["suctionTeesPath"] : station.componentsLocationPaths["pressureTeesPath"]);
+                return componentsLocation.componentsLocationPaths["teesPath"] + (component.StationComponentsType.Equals(StationComponentsTypeEnum.ТВ_тройник_всасывающий)
+                    ? componentsLocation.componentsLocationPaths["suctionTeesPath"] : componentsLocation.componentsLocationPaths["pressureTeesPath"]);
             }
             else if (s1[0].Equals("ШУ"))
             {
-                return station.componentsLocationPaths["controlCabinetsPath"];
+                return componentsLocation.componentsLocationPaths["controlCabinetsPath"];
             }
             else if (s1[0].Equals("КЭ") || s1[0].Equals("КЭР") || s1[0].Equals("КК") || s1[0].Equals("ККР") || s1[0].Equals("К")
                 || s1[0].Equals("КР") || s1[0].Equals("КВЖ") || s1[0].Equals("КНЖ"))
             {
                 string localPath = string.Empty;
-                if (s1[0].Equals("КЭ")) localPath = station.componentsLocationPaths["essentricCoilsPath"];
-                if (s1[0].Equals("КЭР")) localPath = station.componentsLocationPaths["essentricCoilsPathWithNippel"];
-                if (s1[0].Equals("КК")) localPath = station.componentsLocationPaths["concentricCoilsPath"];
-                if (s1[0].Equals("ККР")) localPath = station.componentsLocationPaths["concentricCoilsWithNippelPath"];
-                if (s1[0].Equals("К")) localPath = station.componentsLocationPaths["simpleCoilsPath"];
-                if (s1[0].Equals("КР")) localPath = station.componentsLocationPaths["simpleCoilsWithNippelPath"];
-                if (s1[0].Equals("КВЖ")) localPath = station.componentsLocationPaths["jockeySuctionCoils"];
-                if (s1[0].Equals("КНЖ")) localPath = station.componentsLocationPaths["jockeyPressureCoils"];
+                if (s1[0].Equals("КЭ")) localPath = componentsLocation.componentsLocationPaths["essentricCoilsPath"];
+                if (s1[0].Equals("КЭР")) localPath = componentsLocation.componentsLocationPaths["essentricCoilsPathWithNippel"];
+                if (s1[0].Equals("КК")) localPath = componentsLocation.componentsLocationPaths["concentricCoilsPath"];
+                if (s1[0].Equals("ККР")) localPath = componentsLocation.componentsLocationPaths["concentricCoilsWithNippelPath"];
+                if (s1[0].Equals("К")) localPath = componentsLocation.componentsLocationPaths["simpleCoilsPath"];
+                if (s1[0].Equals("КР")) localPath = componentsLocation.componentsLocationPaths["simpleCoilsWithNippelPath"];
+                if (s1[0].Equals("КВЖ")) localPath = componentsLocation.componentsLocationPaths["jockeySuctionCoils"];
+                if (s1[0].Equals("КНЖ")) localPath = componentsLocation.componentsLocationPaths["jockeyPressureCoils"];
 
-                return station.componentsLocationPaths["coilsPath"] + localPath;
+                return componentsLocation.componentsLocationPaths["coilsPath"] + localPath;
             }
             else if (s1[0].Equals("Рама"))
             {
                 Frame frame = (Frame)component;
-                return station.componentsLocationPaths["framesPath"] + (frame.FrameType.Equals(FrameTypesEnum.StandartRottenFrame)
-                    ? station.componentsLocationPaths["weldedFramesPath"] : station.componentsLocationPaths["framesFromShvellerPath"]);
+                return componentsLocation.componentsLocationPaths["framesPath"] + (frame.FrameType.Equals(FrameTypesEnum.StandartRottenFrame)
+                    ? componentsLocation.componentsLocationPaths["weldedFramesPath"] : componentsLocation.componentsLocationPaths["framesFromShvellerPath"]);
             }
             else if (s1[0].Equals("ФланецСРеле")) 
             {
-                return station.componentsLocationPaths["flangesWithReley"];
+                return componentsLocation.componentsLocationPaths["flangesWithReley"];
             }
 
             return string.Empty;
         }
 
-        public static int GetDistanceBetweenPumpsAxis(Pump pump) 
+        public static int GetDistanceBetweenPumpsAxis(int pumpsWidth) 
         {
             int[] distanceBetweenPumpsAxis = {300, 500, 600, 700, 800, 900, 1000};
 
             for (int i = 0; i < distanceBetweenPumpsAxis.Length; i++)
             {
-                if (distanceBetweenPumpsAxis[i] - pump.RightSidePlaneDistance * 2 > 200)
+                if (distanceBetweenPumpsAxis[i] - pumpsWidth > 200)
                 {
                     return distanceBetweenPumpsAxis[i];
                 }

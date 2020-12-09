@@ -13,12 +13,12 @@ namespace VLADFOM.StationBuilder3D.clslib
         {
             if (PumpStation.IsAutoCalculationDiameterConnection)
             {
-                this.ComponentsName = this.ComponentsNameAutoGenerate(PumpStation, PumpStation.Pump.SuctionSideDn,
-                    PumpStation.Pump.PressureSideDn);
+                this.ComponentsName = this.ComponentsNameAutoGenerate(PumpStation, PumpStation.mainPump.SuctionSideDn,
+                    PumpStation.mainPump.PressureSideDn);
             }
             else this.ComponentsName = ComponentsNameGenerate(PumpStation);
 
-            PathToTheComponent = ComponentsValCalculator.GetFullPathToTheComponent(PumpStation, this);
+            PathToTheComponent = ComponentsValCalculator.GetFullPathToTheComponent(_pumpStation.componentsLocation, this);
         }
 
         public override string ComponentsNameAutoGenerate(PumpStation pumpStation, int pumpsSuctionLineConnectionDn, 
@@ -36,11 +36,13 @@ namespace VLADFOM.StationBuilder3D.clslib
             }
             else if (s1[0].Equals("ТВ") || s1[0].Equals("КВ"))
             {
-                return $"{s1[0]}_DN{pumpStation.SecondaryLineDn}-{pumpStation.DnSuctionCollector}";
+                return $"{s1[0]}_DN{pumpStation.DnSuctionCollector}-{pumpStation.SecondaryLineDn}-{pumpStation.DnSuctionCollector}" +
+                    $"-{pumpStation.DistanceBetweenAxis}";
             }
-            else if (s1[0].Equals("ТН") || s1[0].Equals("КН")) 
+            else if (s1[0].Equals("ТН") || s1[0].Equals("КН"))
             {
-                return $"{s1[0]}_DN{pumpStation.SecondaryLineDn}-{pumpStation.DnPressureCollector}";
+                return $"{s1[0]}_DN{pumpStation.DnPressureCollector}-{pumpStation.SecondaryLineDn}-{pumpStation.DnPressureCollector}" +
+                    $"-{pumpStation.DistanceBetweenAxis}";
             }
             return string.Empty;
         }
@@ -49,7 +51,16 @@ namespace VLADFOM.StationBuilder3D.clslib
         {
             string[] s1 = this.StationComponentsType.ToString().Split('_');
 
-            return $"{s1[0]}_DN{pumpStation.StationScheme.stationComponents[this.StationComponentsType][0]}-{pumpStation.StationScheme.stationComponents[this.StationComponentsType][1]}";
+            if (s1.Equals("ТВ") || s1.Equals("ТН") || s1.Equals("КВ") || s1.Equals("КН")) 
+            {
+                return $"{s1[0]}_DN{pumpStation.StationScheme.stationComponents[this.StationComponentsType][1]}-" +
+                    $"{pumpStation.StationScheme.stationComponents[this.StationComponentsType][0]}-" +
+                    $"{pumpStation.StationScheme.stationComponents[this.StationComponentsType][1]}-" +
+                    $"{pumpStation.DistanceBetweenAxis}";
+            }
+
+            return $"{s1[0]}_DN{pumpStation.StationScheme.stationComponents[this.StationComponentsType][0]}-" +
+                $"{pumpStation.StationScheme.stationComponents[this.StationComponentsType][1]}";
         }
 
     }

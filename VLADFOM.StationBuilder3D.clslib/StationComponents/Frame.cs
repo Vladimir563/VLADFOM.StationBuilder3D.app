@@ -17,9 +17,10 @@ namespace VLADFOM.StationBuilder3D.clslib
         }
 
         public Frame(PumpStation _pumpStation, StationComponentsTypeEnum _stationComponentsType) 
-            : base(_pumpStation,_stationComponentsType)
+            : base(_pumpStation, _stationComponentsType)
         {
-            PathToTheComponent = ComponentsValCalculator.GetFullPathToTheComponent(PumpStation, this);
+            ComponentsName = ComponentsValCalculator.GetFramesFullName(_pumpStation);
+            PathToTheComponent = ComponentsValCalculator.GetFullPathToTheComponent(_pumpStation.componentsLocation, this);
         }
     }
 }
