@@ -1,0 +1,43 @@
+﻿rotation by Y coordinat (180 degrees):
+TransformData(0) = -1
+TransformData(1) = 0
+TransformData(2) = 0
+TransformData(3) = 0
+TransformData(4) = 1
+TransformData(5) = 0
+TransformData(6) = 0
+TransformData(7) = 0
+TransformData(8) = -1
+
+rotation by X coordinat (-90 degrees):
+TransformData(0) = 1
+TransformData(1) = 0
+TransformData(2) = 0
+TransformData(3) = 0
+TransformData(4) = 0
+TransformData(5) = -1
+TransformData(6) = 0
+TransformData(7) = 1
+TransformData(8) = 0
+
+rotation by X coordinat (90 degrees):
+TransformData(0) = 1
+TransformData(1) = 0
+TransformData(2) = 0
+TransformData(3) = 0
+TransformData(4) = 0
+TransformData(5) = 1
+TransformData(6) = 0
+TransformData(7) = -1
+TransformData(8) = 0
+
+rotation by Y coordinat (-90 degrees):
+TransformData(0) = 0
+TransformData(1) = 0
+TransformData(2) = 1
+TransformData(3) = 0
+TransformData(4) = 1
+TransformData(5) = 0
+TransformData(6) = -1
+TransformData(7) = 0
+TransformData(8) = 0

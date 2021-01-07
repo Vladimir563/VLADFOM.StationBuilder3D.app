@@ -6,34 +6,34 @@ using System.Threading.Tasks;
 
 namespace VLADFOM.StationBuilder3D.clslib
 {
-    public class Fittings : PumpStationComponent, IStationComponentInitiable
+    public class Fittings : StationComponent, IStationComponentInitiable
     {
-        public Fittings(PumpStation _pumpStation, StationComponentsTypeEnum _stationComponentsType) 
+        public Fittings(PumpStation _pumpStation, StationComponentTypeEnum _stationComponentsType) 
             : base(_pumpStation, _stationComponentsType)
         {
             if (PumpStation.IsAutoCalculationDiameterConnection) 
             {
-                this.ComponentsName = ComponentsNameAutoGenerate(PumpStation, 0, 0);
+                this.ComponentName = ComponentsNameAutoGenerate(PumpStation, 0, 0);
             }
-            else this.ComponentsName = ComponentsNameGenerate(PumpStation);
+            else this.ComponentName = ComponentsNameGenerate(PumpStation);
 
-            PathToTheComponent = ComponentsValCalculator.GetFullPathToTheComponent(_pumpStation.componentsLocation, this);
+            ComponentLocationPath = ComponentsValCalculator.GetFullPathToTheComponent(_pumpStation.componentsLocation, this);
         }
 
-        public virtual string ComponentsNameAutoGenerate(PumpStation pumpStation, int pumpsSuctionLineConnectionDn, int pumpsPressureLineConnectionDn)
+        public virtual string ComponentsNameAutoGenerate(PumpStation pumpStation, double pumpsSuctionLineConnectionDn, double pumpsPressureLineConnectionDn)
         {
-            string [] s1 = this.StationComponentsType.ToString().Split('_');
-            if (this.StationComponentsType.Equals(StationComponentsTypeEnum.ЗД_затвор_дисковый_всасывающего_коллектора) ||
-                this.StationComponentsType.Equals(StationComponentsTypeEnum.КВЖ_катушка_для_жокей_насоса_всасывающая))
+            string [] s1 = this.ComponentType.ToString().Split('_');
+            if (this.ComponentType.Equals(StationComponentTypeEnum.ЗД_затвор_дисковый_всасывающего_коллектора) ||
+                this.ComponentType.Equals(StationComponentTypeEnum.КВЖ_катушка_для_жокей_насоса_всасывающая))
             {
                 return $"{s1[0]}_DN{pumpStation.DnSuctionCollector}";
             }
-            else if (this.StationComponentsType.Equals(StationComponentsTypeEnum.ЗД_затвор_дисковый_напорного_коллектора) ||
-                this.StationComponentsType.Equals(StationComponentsTypeEnum.КНЖ_катушка_для_жокей_насоса_напорная))
+            else if (this.ComponentType.Equals(StationComponentTypeEnum.ЗД_затвор_дисковый_напорного_коллектора) ||
+                this.ComponentType.Equals(StationComponentTypeEnum.КНЖ_катушка_для_жокей_насоса_напорная))
             {
                 return $"{s1[0]}_DN{pumpStation.DnPressureCollector}";
             }
-            else if (this.StationComponentsType.Equals(StationComponentsTypeEnum.ФланецСРеле_))
+            else if (this.ComponentType.Equals(StationComponentTypeEnum.ФланецСРеле_))
             {
                 return $"{s1[0]}_DN{pumpStation.mainPump.PressureSideDn}";
             }
@@ -41,9 +41,9 @@ namespace VLADFOM.StationBuilder3D.clslib
         }
         public virtual string ComponentsNameGenerate(PumpStation pumpStation)
         {
-            string[] s1 = this.StationComponentsType.ToString().Split('_');
-
-            return $"{s1[0]}_DN{pumpStation.StationScheme.stationComponents[this.StationComponentsType][1]}";
+            string[] s1 = this.ComponentType.ToString().Split('_');
+            
+            return $"{s1[0]}_DN{pumpStation.StationScheme.stationChemeComponents[this.ComponentType].Item2}";
         }
     }
 }

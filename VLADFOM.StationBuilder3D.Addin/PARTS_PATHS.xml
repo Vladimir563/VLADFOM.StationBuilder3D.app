@@ -1,9 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <paths>
 
+  <assemblyPatternLocationPath name ="C:\ProgramData\SolidWorks\SOLIDWORKS 2020\templates\Сборка.asmdot"></assemblyPatternLocationPath>
+
   <mainDirPath name ="D:\StationBuilder3D_база_моделей\"></mainDirPath>
   
   <pumpsPath name ="Насосы\"></pumpsPath>
+  <mainPumpsPath name ="Основные\"></mainPumpsPath> 
+  <jockeyPumpsPath name ="Жокей-насосы\"></jockeyPumpsPath> 
 
   <controlCabinetsPath name ="Шкафы_Управления\"></controlCabinetsPath> 
 
@@ -16,8 +20,8 @@
   <carveCheckValvesPath name ="Резьбовые_Обратные_клапаны\"></carveCheckValvesPath> 
 
   <collectorsPath name ="Коллекторы\"></collectorsPath> 
-  <pressureCollectorsPath name ="Коллекторы_Всасывающие\"></pressureCollectorsPath> 
-  <suctionCollectorsPath name ="Коллекторы_Напорные\"></suctionCollectorsPath> 
+  <pressureCollectorsPath name ="Коллекторы_Напорные\"></pressureCollectorsPath> 
+  <suctionCollectorsPath name ="Коллекторы_Всасывающие\"></suctionCollectorsPath> 
 
   <teesPath name ="Тройники\"></teesPath>
   <suctionTeesPath name ="Тройники_Всасывающие\"></suctionTeesPath> 
@@ -38,4 +42,10 @@
   <framesPath name ="Рамы\"></framesPath>
   <weldedFramesPath name ="Рамы_Стальные_Гнутые\"></weldedFramesPath>
   <framesFromShvellerPath name ="Рамы_из_Швеллера\"></framesFromShvellerPath>
+
+  <flangeOnCarveTransitionPath name ="Переходы\"></flangeOnCarveTransitionPath>
+
+  <nippelsPath name ="Ниппели\"></nippelsPath>
+
+  <screwFittingsPath name ="Американки\"></screwFittingsPath>
 </paths>

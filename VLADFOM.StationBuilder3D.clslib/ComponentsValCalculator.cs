@@ -8,7 +8,7 @@ namespace VLADFOM.StationBuilder3D.clslib
 {
 
     #region Enums
-        public enum StationComponentsTypeEnum
+        public enum StationComponentTypeEnum
         {
             #region Pumps
                 Насос_основной = 100,
@@ -28,12 +28,14 @@ namespace VLADFOM.StationBuilder3D.clslib
 
             #region Collectors
                 КВ_коллектор_всасывающий = 300,
-                КН_коллектор_напорный = 301,
+                КН_коллектор_напорный_горизонт_насос = 301,
+                КН_коллектор_напорный_вертик_насос = 302,
             #endregion
 
             #region Tees
-                ТВ_тройник_всасывающий = 401,
-                ТН_тройник_напорный = 402,
+                ТВ_тройник_всасывающий_1 = 401,
+                ТВ_тройник_всасывающий_2 = 402,
+                ТН_тройник_напорный = 403,
             #endregion
 
             #region Shutters
@@ -44,7 +46,8 @@ namespace VLADFOM.StationBuilder3D.clslib
             #endregion
 
             #region CarveValves
-                ОКР_обратный_клапан_резьбовой = 601,
+                РК_резьбовой_кран_1 = 601,
+                РК_резьбовой_кран_2 = 602,
             #endregion
 
             #region FlangeCheckValves
@@ -52,7 +55,7 @@ namespace VLADFOM.StationBuilder3D.clslib
             #endregion
 
             #region CarveCheckValves
-                РК_резьбовой_кран = 801,
+                ОКР_обратный_клапан_резьбовой = 801,
             #endregion
 
             #region Frame
@@ -64,17 +67,25 @@ namespace VLADFOM.StationBuilder3D.clslib
             #endregion
 
             #region ScrewFitting
-                Американка_ = 1101,
+                Американка_1 = 1101,
+                Американка_2 = 1102,
             #endregion
 
             #region Nippels
                 НиппельВнВн_ = 1201,
                 НиппельВнН_ = 1202,
-                НиппельНН_ = 1203,
+                НиппельНН_1 = 1203,
+                НиппельНН_2 = 1204,
+                НиппельНН_3 = 1205,
         #endregion
 
             #region FlangeWithReley
-                ФланецСРеле_ = 1301
+                ФланецСРеле_ = 1301,
+            #endregion
+
+            #region FlangeOnCarveTransition
+                    ФланцевыйПереход_1 = 1401,
+                    ФланцевыйПереход_2 = 1402
             #endregion
     }
         public enum FrameTypesEnum
@@ -125,7 +136,12 @@ namespace VLADFOM.StationBuilder3D.clslib
 
         public static string GetFramesFullName(PumpStation _pumpStation)
         {
-            if (GetFrameTypeByPumpsWeight(_pumpStation.mainPump.ComponentsWeight).Equals(FrameTypesEnum.StandartRottenFrame))
+            string frameNameWithSupports = "_с_виброопорами";
+
+            if (_pumpStation.StationScheme.StationType.Equals(StationTypeEnum.Пожаротушения) || _pumpStation.StationScheme.StationType.Equals(StationTypeEnum.Ф_Драйв))
+            { frameNameWithSupports = string.Empty; }
+
+            if (GetFrameTypeByPumpsWeight(_pumpStation.mainPump.ComponentWeight).Equals(FrameTypesEnum.StandartRottenFrame))
             {
                 string rottenFrameSize = string.Empty;
                 if (_pumpStation.DistanceBetweenAxis == 300)
@@ -143,7 +159,7 @@ namespace VLADFOM.StationBuilder3D.clslib
                         rottenFrameSize = "400х1200х4";
                     }
                 }
-                else
+                else if (_pumpStation.DistanceBetweenAxis == 500)
                 {
                     if (_pumpStation.PumpsCount == 2)
                     {
@@ -163,17 +179,17 @@ namespace VLADFOM.StationBuilder3D.clslib
                 {
                     return "Рама_швеллер_10П";
                 }
-                return $"Рама_гнутая_{rottenFrameSize}";
+                return $"Рама_гнутая_{rottenFrameSize}{frameNameWithSupports}";
             }
 
-            return $"Рама_швеллер_{(int)ComponentsValCalculator.GetFrameTypeByPumpsWeight(_pumpStation.mainPump.ComponentsWeight)}П";
+            return $"Рама_швеллер_{(int)ComponentsValCalculator.GetFrameTypeByPumpsWeight(_pumpStation.mainPump.ComponentWeight)}П";
         }
 
         public static int GetStationConnectionDnByConsumption(double consumption )
         {
             Dictionary<int, double> tubesDN = new Dictionary<int, double>()
             {
-                { 50, 60.3 },
+                { 50, 60.3},
                 { 65, 76.1},
                 { 80, 88.9},
                 { 100, 104},
@@ -186,7 +202,8 @@ namespace VLADFOM.StationBuilder3D.clslib
                 { 400, 408},
                 { 450, 458},
                 { 500, 508}
-        };
+            };
+
             int DN = 0;
             double D = 0, insideD = 0, S = 0, Q = 0, VFact = 0;
 
@@ -216,48 +233,48 @@ namespace VLADFOM.StationBuilder3D.clslib
         }
 
         public static string GetFullPathToTheComponent(ComponentsLocationPaths componentsLocation, 
-            PumpStationComponent component) 
+            StationComponent component) 
         {
             return String.Format(componentsLocation.componentsLocationPaths["mainDirPath"] + 
-            GetComponentsPathByType(componentsLocation, component) + component.ComponentsName + ".SLDPRT");
+            GetComponentsPathByType(componentsLocation, component) + component.ComponentName + ".SLDPRT");
         }
 
         public static string GetFullPathToTheComponent(ComponentsLocationPaths componentsLocation, string pumpName,
-    PumpStationComponent component)
+    StationComponent component)
         {
             return String.Format(componentsLocation.componentsLocationPaths["mainDirPath"] +
-            GetComponentsPathByType(componentsLocation, pumpName, component) + component.ComponentsName + ".SLDPRT");
+            GetComponentsPathByType(componentsLocation, pumpName, component) + component.ComponentName + ".SLDPRT");
         }
 
-        public static string GetComponentsPathByType(ComponentsLocationPaths componentsLocation, string pumpName, PumpStationComponent component) 
+        public static string GetComponentsPathByType(ComponentsLocationPaths componentsLocation, string pumpName, StationComponent component) 
         {
             string[] startMainPumpsNameChars = pumpName.Split('_');
             return componentsLocation.componentsLocationPaths["pumpsPath"] + startMainPumpsNameChars[0] + @"\";
 
         }
 
-        public static string GetComponentsPathByType(ComponentsLocationPaths componentsLocation, PumpStationComponent component) 
+        public static string GetComponentsPathByType(ComponentsLocationPaths componentsLocation, StationComponent component) 
         {
-            string[] s1 = component.StationComponentsType.ToString().Split('_');
-            
+            string[] s1 = component.ComponentType.ToString().Split('_');
+
             if (s1[0].Equals("КВ") || s1[0].Equals("КН"))
             {
-                return componentsLocation.componentsLocationPaths["collectorsPath"] + (component.StationComponentsType.Equals(StationComponentsTypeEnum.КВ_коллектор_всасывающий)
+                return componentsLocation.componentsLocationPaths["collectorsPath"] + (component.ComponentType.Equals(StationComponentTypeEnum.КВ_коллектор_всасывающий)
                     ? componentsLocation.componentsLocationPaths["suctionCollectorsPath"] : componentsLocation.componentsLocationPaths["pressureCollectorsPath"]);
             }
             else if (s1[0].Equals("ОКФ") || s1[0].Equals("ОКР"))
             {
-                return componentsLocation.componentsLocationPaths["checkValvesPath"] + (component.StationComponentsType.Equals(StationComponentsTypeEnum.ОКФ_обратный_клапан_фланцевый)
+                return componentsLocation.componentsLocationPaths["checkValvesPath"] + (component.ComponentType.Equals(StationComponentTypeEnum.ОКФ_обратный_клапан_фланцевый)
                     ? componentsLocation.componentsLocationPaths["flangeCheckValvesPath"] : componentsLocation.componentsLocationPaths["carveCheckValvesPath"]);
             }
             else if (s1[0].Equals("ЗД") || s1[0].Equals("РК"))
             {
-                return componentsLocation.componentsLocationPaths["lockValvesPath"] + (component.StationComponentsType.Equals(StationComponentsTypeEnum.РК_резьбовой_кран)
+                return componentsLocation.componentsLocationPaths["lockValvesPath"] + (component.ComponentType.Equals(StationComponentTypeEnum.РК_резьбовой_кран_2) || component.ComponentType.Equals(StationComponentTypeEnum.РК_резьбовой_кран_1)
                     ? componentsLocation.componentsLocationPaths["carvesValvesPath"] : componentsLocation.componentsLocationPaths["shuttersPath"]);
             }
             else if (s1[0].Equals("ТВ") || s1[0].Equals("ТН"))
             {
-                return componentsLocation.componentsLocationPaths["teesPath"] + (component.StationComponentsType.Equals(StationComponentsTypeEnum.ТВ_тройник_всасывающий)
+                return componentsLocation.componentsLocationPaths["teesPath"] + (component.ComponentType.Equals(StationComponentTypeEnum.ТВ_тройник_всасывающий_1) || component.ComponentType.Equals(StationComponentTypeEnum.ТВ_тройник_всасывающий_2)
                     ? componentsLocation.componentsLocationPaths["suctionTeesPath"] : componentsLocation.componentsLocationPaths["pressureTeesPath"]);
             }
             else if (s1[0].Equals("ШУ"))
@@ -285,9 +302,21 @@ namespace VLADFOM.StationBuilder3D.clslib
                 return componentsLocation.componentsLocationPaths["framesPath"] + (frame.FrameType.Equals(FrameTypesEnum.StandartRottenFrame)
                     ? componentsLocation.componentsLocationPaths["weldedFramesPath"] : componentsLocation.componentsLocationPaths["framesFromShvellerPath"]);
             }
-            else if (s1[0].Equals("ФланецСРеле")) 
+            else if (s1[0].Equals("ФланецСРеле"))
             {
                 return componentsLocation.componentsLocationPaths["flangesWithReley"];
+            }
+            else if (s1[0].Equals("ФланцевыйПереход"))
+            {
+                return componentsLocation.componentsLocationPaths["flangeOnCarveTransitionPath"];
+            }
+            else if (s1[0].Equals("НиппельНН"))
+            {
+                return componentsLocation.componentsLocationPaths["nippelsPath"];
+            }
+            else if (s1[0].Equals("Американка")) 
+            {
+                return componentsLocation.componentsLocationPaths["screwFittingsPath"];
             }
 
             return string.Empty;

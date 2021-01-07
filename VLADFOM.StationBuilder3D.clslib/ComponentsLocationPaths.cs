@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,6 @@ namespace VLADFOM.StationBuilder3D.clslib
     public class ComponentsLocationPaths
     {
         public Dictionary<string, string> componentsLocationPaths = new Dictionary<string, string>();
-        
 
         public ComponentsLocationPaths()
         {
@@ -21,7 +21,7 @@ namespace VLADFOM.StationBuilder3D.clslib
         public static Dictionary<string, string> PathsInitialize(Dictionary<string, string> componentsLocationPaths)
         {
             string[] pathNames = {
-
+                "assemblyPatternLocationPath",
                 "mainDirPath",
                 "pumpsPath",
                 "mainPumpsPath",
@@ -50,7 +50,10 @@ namespace VLADFOM.StationBuilder3D.clslib
                 "framesPath",
                 "weldedFramesPath",
                 "framesFromShvellerPath",
-                "flangesWithReley"
+                "flangesWithReley",
+                "flangeOnCarveTransitionPath",
+                "nippelsPath",
+                "screwFittingsPath"
             };
 
             XmlNode attr;
@@ -58,6 +61,8 @@ namespace VLADFOM.StationBuilder3D.clslib
             XmlDocument xDoc = new XmlDocument();
 
             var xmlSettingsLocation = Path.Combine(Path.GetDirectoryName(typeof(PumpStation).Assembly.CodeBase).Replace(@"file:\", string.Empty).Replace(@"bin\", string.Empty).Replace(@"Debug", string.Empty), "PARTS_PATHS.xml");
+
+            Debug.Print(xmlSettingsLocation);
 
             xDoc.Load(xmlSettingsLocation);
 
@@ -78,6 +83,4 @@ namespace VLADFOM.StationBuilder3D.clslib
             return componentsLocationPaths;
         }
     }
-
-
 }

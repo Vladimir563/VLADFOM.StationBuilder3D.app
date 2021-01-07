@@ -11,31 +11,15 @@ namespace VLADFOM.StationBuilder3D.clslib
         private StationTypeEnum stationType;
 
         /// <summary>
-        /// 
-        /// Dictionary<StationComponentsTypeEnum, int[]>
-        /// ------------------------------------------------------------------
-        /// first member is StationComponentsTypeEnum (components type)
-        /// ------------------------------------------------------------------
-        /// second member is int array[12]:
-        /// array[0] is the smaller DN 
-        /// array[1] is the bigger DN (or the main DN for component from current form instance)
-        /// __________________________________________________________________
-        /// array[2] is rotation by X1 axes
-        /// array[3] is rotation by X2 axes
-        /// array[4] is rotation by X3 axes
-        /// __________________________________________________________________
-        /// array[5] is rotation by Y1 axes
-        /// array[6] is rotation by Y2 axes
-        /// array[7] is rotation by Y3 axes
-        /// __________________________________________________________________
-        /// array[8] is rotation by Z1 axes
-        /// array[9] is rotation by Z2 axes
-        /// array[10] is rotation by Z3 axes
-        /// __________________________________________________________________
-        /// array[11] is the component for the new Line (0 equals false, 1 equals true (reverse planes), 2 start new line)
-        /// 
+        /// Parameters of the stationChemeComponents members: 
+        /// the first value presents component's input diameter connection
+        /// the second value presents component's output diameter connection
+        /// int [] represents the array of 9 numbers (x1,x2,x3,y1,y2,y3,z1,z2,z3) there are the rotation values contains
+        /// or it can be represents the array of 10 numbers (x1,x2,x3,y1,y2,y3,z1,z2,z3,a1)
+        /// where a1 value (if exist) shows current pumps connection (is the new line of pump or not)
+        /// the last value shows which line current component belongs (true - belongs pressure line, false - belongs suction line) 
         /// </summary>
-        public Dictionary<StationComponentsTypeEnum, int[]> stationComponents = new Dictionary<StationComponentsTypeEnum, int[]>();
+        public Dictionary<StationComponentTypeEnum, (double, double, int[], bool)> stationChemeComponents;
 
         public StationTypeEnum StationType
         {
@@ -44,94 +28,357 @@ namespace VLADFOM.StationBuilder3D.clslib
         }
 
         #region FireProtectionStationsSchemes
-        public static StationScheme GetSimpleFireProtectionScheme2HorizontalPumps(int pumpPressureConnection, int pumpSuctionConnection)
+
+        #region HorizontalPumps
+        public static StationScheme GetSimpleFireProtectionScheme2HorizontalPumpsFlangePumpConnection(double pumpPressureConnection, double pumpSuctionConnection)
         {
             StationScheme scheme = new StationScheme();
-            scheme.stationComponents = new Dictionary<StationComponentsTypeEnum, int[]>
+            scheme.stationChemeComponents = new Dictionary<StationComponentTypeEnum, (double, double, int[], bool)>()
             {
-                { StationComponentsTypeEnum.Насос_основной, new int[]{ pumpPressureConnection,pumpSuctionConnection, 1, 0, 0, 0, 1, 0, 0, 0, 1 ,0}},
-                { StationComponentsTypeEnum.КЭ_катушка_эксцентрическая, new int[]{ 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0} },
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_подводящей_линии_всасывающего_коллектора, new int[]{ 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0} },
-                { StationComponentsTypeEnum.ТВ_тройник_всасывающий,new int[]{ 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0} },
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_всасывающего_коллектора, new int[]{ 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0 } },
-                { StationComponentsTypeEnum.КК_катушка_концентрическая, new int []{ 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 2} },
-                { StationComponentsTypeEnum.ОКФ_обратный_клапан_фланцевый, new int[]{ 0, 0, 1, 0, 0, 0, 0, -1, 0, 1, 0, 1} },
-                { StationComponentsTypeEnum.КР_катушка_резьбовая,new int[]{ 0, 0, 0, 0, -1, 1, 0, 0, 0, -1, 0, 1 } },
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_подводящей_линии_напорного_коллектора, new int[]{ 0, 0, 0, 0, -1, 1, 0, 0, 0, -1, 0 ,1} },
-                { StationComponentsTypeEnum.ТН_тройник_напорный, new int[]{ 0, 0, 1, 0, 0, 0, 0, -1, 0, 1, 0, 1 } },
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_напорного_коллектора, new int[]{ 0, 0, 0, 0, -1, 0, -1, 0, -1, 0, 0, 1 } },
-                { StationComponentsTypeEnum.Рама_, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
-                { StationComponentsTypeEnum.ШУ_, new int[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } }
+                {StationComponentTypeEnum.Насос_основной, (pumpPressureConnection, pumpSuctionConnection, new int[]{}, false)},
+                {StationComponentTypeEnum.КЭ_катушка_эксцентрическая, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_подводящей_линии_всасывающего_коллектора, (0, 0, new int[]{-1, 0, 0, 0, 1, 0, 0, 0, -1}, false)},
+                {StationComponentTypeEnum.ТВ_тройник_всасывающий_1, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_всасывающего_коллектора, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.КК_катушка_концентрическая, (0, 0, new int[10], true)},
+                {StationComponentTypeEnum.ОКФ_обратный_клапан_фланцевый, (0, 0, new int[]{1, 0, 0, 0, 0, -1, 0, 1, 0}, true)},
+                {StationComponentTypeEnum.КР_катушка_резьбовая, (0, 0, new int []{0, 0, -1, 1, 0, 0, 0, -1, 0}, true)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_подводящей_линии_напорного_коллектора, (0, 0, new int[]{0, 0, -1, -1, 0, 0, 0, 1, 0}, true)},
+                {StationComponentTypeEnum.ТН_тройник_напорный, (0, 0, new int[]{1, 0, 0, 0, 0, -1, 0, 1, 0}, true)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_напорного_коллектора, (0, 0, new int[]{0, 0, -1, 0, -1, 0, -1, 0, 0}, true)},
+                {StationComponentTypeEnum.Рама_, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ШУ_, (0, 0, new int[]{}, false)}
             };
             return scheme;
         }
-
-        public static StationScheme GetSimpleFireProtectionSchemeMoreThan2HorizontalPumps(int pumpPressureConnection, int pumpSuctionConnection)
+        public static StationScheme GetSimpleFireProtectionScheme2HorizontalPumpsCarvePumpConnection(double pumpPressureConnection, double pumpSuctionConnection)
         {
             StationScheme scheme = new StationScheme();
-            scheme.stationComponents = new Dictionary<StationComponentsTypeEnum, int[]>
+            scheme.stationChemeComponents = new Dictionary<StationComponentTypeEnum, (double, double, int[], bool)>()
             {
-                { StationComponentsTypeEnum.Насос_основной, new int[]{pumpPressureConnection,pumpSuctionConnection,0,0,0}},
-                { StationComponentsTypeEnum.КЭ_катушка_эксцентрическая, new int[]{}},
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_подводящей_линии_всасывающего_коллектора, new int[]{} },
-                { StationComponentsTypeEnum.ТВ_тройник_всасывающий,new int[]{} },
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_всасывающего_коллектора, new int[]{} },
-                { StationComponentsTypeEnum.ККР_катушка_концентрическая_резьбовая, new int []{} },
-                { StationComponentsTypeEnum.ОКФ_обратный_клапан_фланцевый, new int[]{} },
-                { StationComponentsTypeEnum.КР_катушка_резьбовая,new int[]{} },
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_подводящей_линии_напорного_коллектора, new int[]{} },
-                { StationComponentsTypeEnum.ТН_тройник_напорный, new int[]{} },
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_напорного_коллектора, new int[]{} },
-                { StationComponentsTypeEnum.Рама_, new int[]{} },
-                { StationComponentsTypeEnum.ШУ_, new int[]{} }
+                {StationComponentTypeEnum.Насос_основной, (pumpPressureConnection, pumpSuctionConnection, new int[]{}, false)},
+                {StationComponentTypeEnum.ФланцевыйПереход_1, (0, 0, new int[]{-1, 0, 0, 0, 1, 0, 0, 0, -1}, false)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_подводящей_линии_всасывающего_коллектора, (0, 0, new int[]{-1, 0, 0, 0, 1, 0, 0, 0, -1}, false)},
+                {StationComponentTypeEnum.ТВ_тройник_всасывающий_1, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_всасывающего_коллектора, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ФланцевыйПереход_2, (0, 0, new int[]{1, 0, 0, 0, 0, 1, 0, -1, 0}, true)},
+                {StationComponentTypeEnum.ОКФ_обратный_клапан_фланцевый, (0, 0, new int[]{1, 0, 0, 0, 0, -1, 0, 1, 0}, true)},
+                {StationComponentTypeEnum.КР_катушка_резьбовая, (0, 0, new int []{0, 0, -1, 1, 0, 0, 0, -1, 0}, true)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_подводящей_линии_напорного_коллектора, (0, 0, new int[]{0, 0, -1, -1, 0, 0, 0, 1, 0}, true)},
+                {StationComponentTypeEnum.ТН_тройник_напорный, (0, 0, new int[]{1, 0, 0, 0, 0, -1, 0, 1, 0}, true)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_напорного_коллектора, (0, 0, new int[]{0, 0, -1, 0, -1, 0, -1, 0, 0}, true)},
+                {StationComponentTypeEnum.Рама_, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ШУ_, (0, 0, new int[]{}, false)}
             };
             return scheme;
         }
-
-        public static StationScheme GetSimpleFireProtectionScheme2VerticalPumps(int pumpPressureConnection, int pumpSuctionConnection)
+        public static StationScheme GetSimpleFireProtectionSchemeMoreThan2HorizontalPumpsFlangePumpConnection(double pumpPressureConnection, double pumpSuctionConnection)
         {
             StationScheme scheme = new StationScheme();
-            scheme.stationComponents = new Dictionary<StationComponentsTypeEnum, int[]>
+            scheme.stationChemeComponents = new Dictionary<StationComponentTypeEnum, (double, double, int[], bool)>()
             {
-                { StationComponentsTypeEnum.Насос_основной, new int[]{pumpPressureConnection,pumpSuctionConnection,0,0,0}},
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_подводящей_линии_всасывающего_коллектора, new int[]{} },
-                { StationComponentsTypeEnum.ТВ_тройник_всасывающий,new int[]{} },
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_всасывающего_коллектора, new int[]{} },
-                { StationComponentsTypeEnum.ОКФ_обратный_клапан_фланцевый, new int[]{} },
-                { StationComponentsTypeEnum.К_катушка, new int[]{} },
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_подводящей_линии_напорного_коллектора, new int[]{} },
-                { StationComponentsTypeEnum.ТН_тройник_напорный, new int[]{} },
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_напорного_коллектора, new int[]{} },
-                { StationComponentsTypeEnum.Рама_, new int[]{} },
-                { StationComponentsTypeEnum.ШУ_, new int[]{} }
+                {StationComponentTypeEnum.Насос_основной, (pumpPressureConnection, pumpSuctionConnection, new int[]{}, false)},
+                {StationComponentTypeEnum.КЭ_катушка_эксцентрическая, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_подводящей_линии_всасывающего_коллектора, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ТВ_тройник_всасывающий_1, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_всасывающего_коллектора, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ККР_катушка_концентрическая_резьбовая, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.ОКФ_обратный_клапан_фланцевый, (0, 0, new int[]{1, 0, 0, 0, 0, -1, 0, 1, 0}, true)},
+                {StationComponentTypeEnum.КР_катушка_резьбовая, (0, 0, new int []{0, 0, -1, 1, 0, 0, 0, -1, 0}, true)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_подводящей_линии_напорного_коллектора, (0, 0, new int[]{0, 0, -1, 1, 0, 0, 0, -1, 0}, true)},
+                {StationComponentTypeEnum.ТН_тройник_напорный, (0, 0, new int[]{1, 0, 0, 0, 0, -1, 0, 1, 0}, true)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_напорного_коллектора, (0, 0, new int[]{0, 0, -1, 0, -1, 0, -1, 0, 0}, true)},
+                {StationComponentTypeEnum.Рама_, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ШУ_, (0, 0, new int[]{}, false)}
             };
             return scheme;
         }
-
-        public static StationScheme GetSimpleFireProtectionSchemeMoreThan2VerticalPumps(int pumpPressureConnection, int pumpSuctionConnection)
+        public static StationScheme GetSimpleFireProtectionSchemeMoreThan2HorizontalPumpsCarvePumpConnection(double pumpPressureConnection, double pumpSuctionConnection)
         {
             StationScheme scheme = new StationScheme();
-            scheme.stationComponents = new Dictionary<StationComponentsTypeEnum, int[]>
+            scheme.stationChemeComponents = new Dictionary<StationComponentTypeEnum, (double, double, int[], bool)>()
             {
-                { StationComponentsTypeEnum.Насос_основной, new int[]{pumpPressureConnection,pumpSuctionConnection,0,0,0}},
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_подводящей_линии_всасывающего_коллектора, new int[]{} },
-                { StationComponentsTypeEnum.ТВ_тройник_всасывающий,new int[]{} },
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_всасывающего_коллектора, new int[]{} },
-                { StationComponentsTypeEnum.ФланецСРеле_, new int[]{} },
-                { StationComponentsTypeEnum.ОКФ_обратный_клапан_фланцевый, new int[]{} },
-                { StationComponentsTypeEnum.К_катушка, new int[]{} },
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_подводящей_линии_напорного_коллектора, new int[]{} },
-                { StationComponentsTypeEnum.ТН_тройник_напорный, new int[]{} },
-                { StationComponentsTypeEnum.ЗД_затвор_дисковый_напорного_коллектора, new int[]{} },
-                { StationComponentsTypeEnum.Рама_, new int[]{} },
-                { StationComponentsTypeEnum.ШУ_, new int[]{} }
+                {StationComponentTypeEnum.Насос_основной, (pumpPressureConnection, pumpSuctionConnection, new int[]{}, false)},
+                {StationComponentTypeEnum.ФланцевыйПереход_1, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_подводящей_линии_всасывающего_коллектора, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ТВ_тройник_всасывающий_1, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_всасывающего_коллектора, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ФланцевыйПереход_2, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.ФланецСРеле_, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.ОКФ_обратный_клапан_фланцевый, (0, 0, new int[]{1, 0, 0, 0, 0, -1, 0, 1, 0}, true)},
+                {StationComponentTypeEnum.КР_катушка_резьбовая, (0, 0, new int []{0, 0, -1, 1, 0, 0, 0, -1, 0}, true)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_подводящей_линии_напорного_коллектора, (0, 0, new int[]{0, 0, -1, 1, 0, 0, 0, -1, 0}, true)},
+                {StationComponentTypeEnum.ТН_тройник_напорный, (0, 0, new int[]{1, 0, 0, 0, 0, -1, 0, 1, 0}, true)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_напорного_коллектора, (0, 0, new int[]{0, 0, -1, 0, -1, 0, -1, 0, 0}, true)},
+                {StationComponentTypeEnum.Рама_, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ШУ_, (0, 0, new int[]{}, false)}
             };
             return scheme;
         }
         #endregion
 
+        #region VerticalPumps
+        public static StationScheme GetSimpleFireProtectionScheme2VerticalPumpsFlangePumpConnection(double pumpPressureConnection, double pumpSuctionConnection)
+        {
+            StationScheme scheme = new StationScheme();
+            scheme.stationChemeComponents = new Dictionary<StationComponentTypeEnum, (double, double, int[], bool)>()
+            {
+                {StationComponentTypeEnum.Насос_основной, (pumpPressureConnection, pumpSuctionConnection, new int[]{}, false)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_подводящей_линии_всасывающего_коллектора, (0, 0, new int[]{-1, 0, 0, 0, 1, 0, 0, 0, -1}, false)},
+                {StationComponentTypeEnum.ТВ_тройник_всасывающий_1, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_всасывающего_коллектора, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ОКФ_обратный_клапан_фланцевый, (0, 0, new int[]{-1, 0, 0, 0, 1, 0, 0, 0, -1}, true)},
+                {StationComponentTypeEnum.К_катушка, (0, 0, new int[]{ }, true)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_подводящей_линии_напорного_коллектора, (0, 0, new int[]{-1, 0, 0, 0, 1, 0, 0, 0, -1}, true)},
+                {StationComponentTypeEnum.ТВ_тройник_всасывающий_2, (0, 0, new int[]{-1, 0, 0, 0, 1, 0, 0, 0, -1}, true)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_напорного_коллектора, (0, 0, new int[]{0, 0, 1, 0, 1, 0, -1, 0, 0}, true)},
+                {StationComponentTypeEnum.Рама_, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ШУ_, (0, 0, new int[]{}, false)}
+            };
+            return scheme;
+        }
+        public static StationScheme GetSimpleFireProtectionScheme2VerticalPumpsCarvePumpConnection(double pumpPressureConnection, double pumpSuctionConnection)
+        {
+            StationScheme scheme = new StationScheme();
+            scheme.stationChemeComponents = new Dictionary<StationComponentTypeEnum, (double, double, int[], bool)>()
+            {
+                {StationComponentTypeEnum.Насос_основной, (pumpPressureConnection, pumpSuctionConnection, new int[]{}, false)},
+                {StationComponentTypeEnum.ФланцевыйПереход_1, (0, 0, new int[]{-1, 0, 0, 0, 1, 0, 0, 0, -1}, false)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_подводящей_линии_всасывающего_коллектора, (0, 0, new int[]{-1, 0, 0, 0, 1, 0, 0, 0, -1}, false)},
+                {StationComponentTypeEnum.ТВ_тройник_всасывающий_1, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_всасывающего_коллектора, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ФланцевыйПереход_2, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.ОКФ_обратный_клапан_фланцевый, (0, 0, new int[]{1, 0, 0, 0, 0, -1, 0, 1, 0}, true)},
+                {StationComponentTypeEnum.К_катушка, (0, 0, new int[]{ }, true)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_подводящей_линии_напорного_коллектора, (0, 0, new int[]{-1, 0, 0, 0, 1, 0, 0, 0, -1}, true)},
+                {StationComponentTypeEnum.ТВ_тройник_всасывающий_2, (0, 0, new int[]{-1, 0, 0, 0, 1, 0, 0, 0, -1}, true)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_напорного_коллектора, (0, 0, new int[]{0, 0, 1, 0, 1, 0, -1, 0, 0}, true)},
+                {StationComponentTypeEnum.Рама_, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ШУ_, (0, 0, new int[]{}, false)}
+            };
+            return scheme;
+        }
+        public static StationScheme GetSimpleFireProtectionSchemeMoreThan2VerticalPumpsFlangePumpConnection(double pumpPressureConnection, double pumpSuctionConnection)
+        {
+            StationScheme scheme = new StationScheme();
+            scheme.stationChemeComponents = new Dictionary<StationComponentTypeEnum, (double, double, int[], bool)>()
+            {
+                {StationComponentTypeEnum.Насос_основной, (pumpPressureConnection, pumpSuctionConnection, new int[]{}, false)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_подводящей_линии_всасывающего_коллектора, (0, 0, new int[]{-1, 0, 0, 0, 1, 0, 0, 0, -1}, false)},
+                {StationComponentTypeEnum.ТВ_тройник_всасывающий_1, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_всасывающего_коллектора, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ФланецСРеле_, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.ОКФ_обратный_клапан_фланцевый, (0, 0, new int[]{1, 0, 0, 0, 0, -1, 0, 1, 0}, true)},
+                {StationComponentTypeEnum.К_катушка, (0, 0, new int[]{ }, true)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_подводящей_линии_напорного_коллектора, (0, 0, new int[]{0, 0, -1, -1, 0, 0, 0, 1, 0}, true)},
+                {StationComponentTypeEnum.ТВ_тройник_всасывающий_2, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_напорного_коллектора, (0, 0, new int[]{0, 0, -1, 0, -1, 0, -1, 0, 0}, true)},
+                {StationComponentTypeEnum.Рама_, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ШУ_, (0, 0, new int[]{}, false)}
+            };
+            return scheme;
+        }
+        public static StationScheme GetSimpleFireProtectionSchemeMoreThan2VerticalPumpsCarvePumpConnection(double pumpPressureConnection, double pumpSuctionConnection)
+        {
+            StationScheme scheme = new StationScheme();
+            scheme.stationChemeComponents = new Dictionary<StationComponentTypeEnum, (double, double, int[], bool)>()
+            {
+                {StationComponentTypeEnum.Насос_основной, (pumpPressureConnection, pumpSuctionConnection, new int[]{}, false)},
+                {StationComponentTypeEnum.ФланцевыйПереход_1, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_подводящей_линии_всасывающего_коллектора, (0, 0, new int[]{-1, 0, 0, 0, 1, 0, 0, 0, -1}, false)},
+                {StationComponentTypeEnum.ТВ_тройник_всасывающий_1, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_всасывающего_коллектора, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ФланцевыйПереход_2, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.ФланецСРеле_, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.ОКФ_обратный_клапан_фланцевый, (0, 0, new int[]{1, 0, 0, 0, 0, -1, 0, 1, 0}, true)},
+                {StationComponentTypeEnum.К_катушка, (0, 0, new int[]{ }, true)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_подводящей_линии_напорного_коллектора, (0, 0, new int[]{0, 0, -1, -1, 0, 0, 0, 1, 0}, true)},
+                {StationComponentTypeEnum.ТВ_тройник_всасывающий_2, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_напорного_коллектора, (0, 0, new int[]{0, 0, -1, 0, -1, 0, -1, 0, 0}, true)},
+                {StationComponentTypeEnum.Рама_, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ШУ_, (0, 0, new int[]{}, false)}
+            };
+            return scheme;
+        }
+        #endregion
 
-        #region PressureIncreaseStationsSchemes
+        #endregion
+
+        #region PressureIncreaseStationSchemes
+
+        #region VerticalPumps
+        public static StationScheme GetSimplePressureIncreaseSchemeVerticalPumpsFlangePumpConnectionBiggerThan50
+            (double pumpPressureConnection, double pumpSuctionConnection)
+        {
+            StationScheme scheme = new StationScheme();
+            scheme.stationChemeComponents = new Dictionary<StationComponentTypeEnum, (double, double, int[], bool)>()
+            {
+                {StationComponentTypeEnum.Насос_основной, (pumpPressureConnection, pumpSuctionConnection, new int[]{}, false)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_подводящей_линии_всасывающего_коллектора, (0, 0, new int[]{-1, 0, 0, 0, 1, 0, 0, 0, -1}, false)},
+                {StationComponentTypeEnum.КВ_коллектор_всасывающий, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ОКФ_обратный_клапан_фланцевый, (0, 0, new int[]{1, 0, 0, 0, 0, -1, 0, 1, 0}, true)},
+                {StationComponentTypeEnum.К_катушка, (0, 0, new int []{0, 0, -1, 1, 0, 0, 0, -1, 0}, true)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_подводящей_линии_напорного_коллектора, (0, 0, new int[]{0, 0, -1, -1, 0, 0, 0, 1, 0}, true)},
+                {StationComponentTypeEnum.КН_коллектор_напорный_вертик_насос, (0, 0, new int[]{1, 0, 0, 0, 0, -1, 0, 1, 0}, true)},
+                {StationComponentTypeEnum.Рама_, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ШУ_, (0, 0, new int[]{}, false)}
+            };
+            return scheme;
+        }
+
+        public static StationScheme GetSimplePressureIncreaseSchemeVerticalPumpsFlangePumpConnectionSmallerThan50
+            (double pumpPressureConnection, double pumpSuctionConnection)
+        {
+            StationScheme scheme = new StationScheme();
+            scheme.stationChemeComponents = new Dictionary<StationComponentTypeEnum, (double, double, int[], bool)>()
+            {
+                {StationComponentTypeEnum.Насос_основной, (pumpPressureConnection, pumpSuctionConnection, new int[]{}, false)},
+                {StationComponentTypeEnum.ФланцевыйПереход_1, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.РК_резьбовой_кран_1, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.КВ_коллектор_всасывающий, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ФланцевыйПереход_2, (0, 0, new int[]{-1, 0, 0, 0, 1, 0, 0, 0, -1}, true)},
+                {StationComponentTypeEnum.ОКР_обратный_клапан_резьбовой, (0, 0, new int[]{-1, 0, 0, 0, 1, 0, 0, 0, -1}, true)},
+                {StationComponentTypeEnum.НиппельНН_1, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.РК_резьбовой_кран_2, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.КН_коллектор_напорный_вертик_насос, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.Рама_, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ШУ_, (0, 0, new int[]{}, false)}
+            };
+            return scheme;
+        }
+
+        public static StationScheme GetSimplePressureIncreaseSchemeVerticalPumpsCarvePumpConnectionBiggerThan1_1_4
+            (double pumpPressureConnection, double pumpSuctionConnection)
+        {
+            StationScheme scheme = new StationScheme();
+            scheme.stationChemeComponents = new Dictionary<StationComponentTypeEnum, (double, double, int[], bool)>()
+            {
+                {StationComponentTypeEnum.Насос_основной, (pumpPressureConnection, pumpSuctionConnection, new int[]{}, false)},
+                {StationComponentTypeEnum.Американка_1, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.НиппельНН_1, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.РК_резьбовой_кран_2, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.КВ_коллектор_всасывающий, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.Американка_2, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.НиппельНН_2, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.ОКР_обратный_клапан_резьбовой, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.НиппельНН_3, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.РК_резьбовой_кран_2, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.КН_коллектор_напорный_вертик_насос, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.Рама_, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ШУ_, (0, 0, new int[]{}, false)}
+            };
+            return scheme;
+        }
+
+        public static StationScheme GetSimplePressureIncreaseSchemeVerticalPumpsCarvePumpConnectionSmallerThan1_1_2
+            (double pumpPressureConnection, double pumpSuctionConnection)
+        {
+            StationScheme scheme = new StationScheme();
+            scheme.stationChemeComponents = new Dictionary<StationComponentTypeEnum, (double, double, int[], bool)>()
+            {
+                {StationComponentTypeEnum.Насос_основной, (pumpPressureConnection, pumpSuctionConnection, new int[]{}, false)},
+                {StationComponentTypeEnum.Американка_1, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.РК_резьбовой_кран_2, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.КВ_коллектор_всасывающий, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.Американка_2, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.НиппельНН_1, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.ОКР_обратный_клапан_резьбовой, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.РК_резьбовой_кран_2, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.КН_коллектор_напорный_вертик_насос, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.Рама_, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ШУ_, (0, 0, new int[]{}, false)}
+            };
+            return scheme;
+        }
+        #endregion
+
+        #region HorizontalPumps
+        public static StationScheme GetSimplePressureIncreaseSchemeHorizontalPumpsFlangePumpConnectionBiggerThan50
+            (double pumpPressureConnection, double pumpSuctionConnection)
+        {
+            StationScheme scheme = new StationScheme();
+            scheme.stationChemeComponents = new Dictionary<StationComponentTypeEnum, (double, double, int[], bool)>()
+            {
+                {StationComponentTypeEnum.Насос_основной, (pumpPressureConnection, pumpSuctionConnection, new int[]{}, false)},
+                {StationComponentTypeEnum.КЭ_катушка_эксцентрическая, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_подводящей_линии_всасывающего_коллектора, (0, 0, new int[]{-1, 0, 0, 0, 1, 0, 0, 0, -1}, false)},
+                {StationComponentTypeEnum.КВ_коллектор_всасывающий, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.КК_катушка_концентрическая, (0, 0, new int[10], true)},
+                {StationComponentTypeEnum.ОКФ_обратный_клапан_фланцевый, (0, 0, new int[]{1, 0, 0, 0, 0, -1, 0, 1, 0}, true)},
+                {StationComponentTypeEnum.КР_катушка_резьбовая, (0, 0, new int []{0, 0, -1, 1, 0, 0, 0, -1, 0}, true)},
+                {StationComponentTypeEnum.ЗД_затвор_дисковый_подводящей_линии_напорного_коллектора, (0, 0, new int[]{0, 0, -1, -1, 0, 0, 0, 1, 0}, true)},
+                {StationComponentTypeEnum.КН_коллектор_напорный_горизонт_насос, (0, 0, new int[]{1, 0, 0, 0, 0, -1, 0, 1, 0}, true)},
+                {StationComponentTypeEnum.Рама_, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ШУ_, (0, 0, new int[]{}, false)}
+            };
+            return scheme;
+        }
+
+        public static StationScheme GetSimplePressureIncreaseSchemeHorizontalPumpsFlangePumpConnectionSmallerThan50
+            (double pumpPressureConnection, double pumpSuctionConnection)
+        {
+            StationScheme scheme = new StationScheme();
+            scheme.stationChemeComponents = new Dictionary<StationComponentTypeEnum, (double, double, int[], bool)>()
+            {
+                {StationComponentTypeEnum.Насос_основной, (pumpPressureConnection, pumpSuctionConnection, new int[]{}, false)},
+                {StationComponentTypeEnum.ФланцевыйПереход_1, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.РК_резьбовой_кран_1, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.КВ_коллектор_всасывающий, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ФланцевыйПереход_2, (0, 0, new int[]{-1, 0, 0, 0, 1, 0, 0, 0, -1}, true)},
+                {StationComponentTypeEnum.ОКР_обратный_клапан_резьбовой, (0, 0, new int[]{-1, 0, 0, 0, 1, 0, 0, 0, -1}, true)},
+                {StationComponentTypeEnum.НиппельНН_1, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.РК_резьбовой_кран_2, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.КН_коллектор_напорный_горизонт_насос, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.Рама_, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ШУ_, (0, 0, new int[]{}, false)}
+            };
+            return scheme;
+        }
+
+        public static StationScheme GetSimplePressureIncreaseSchemeHorizontalPumpsCarvePumpConnectionBiggerThan1_1_4
+            (double pumpPressureConnection, double pumpSuctionConnection)
+        {
+            StationScheme scheme = new StationScheme();
+            scheme.stationChemeComponents = new Dictionary<StationComponentTypeEnum, (double, double, int[], bool)>()
+            {
+                {StationComponentTypeEnum.Насос_основной, (pumpPressureConnection, pumpSuctionConnection, new int[]{}, false)},
+                {StationComponentTypeEnum.Американка_1, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.НиппельНН_1, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.РК_резьбовой_кран_1, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.КВ_коллектор_всасывающий, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.Американка_2, (0, 0, new int[]{1, 0, 0, 0, 0, -1, 0, 1, 0}, true)},
+                {StationComponentTypeEnum.НиппельНН_2, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.ОКР_обратный_клапан_резьбовой, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.НиппельНН_3, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.РК_резьбовой_кран_2, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.КН_коллектор_напорный_горизонт_насос, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.Рама_, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ШУ_, (0, 0, new int[]{}, false)}
+            };
+            return scheme;
+        }
+
+        public static StationScheme GetSimplePressureIncreaseSchemeHorizontalPumpsCarvePumpConnectionSmallerThan1_1_2
+            (double pumpPressureConnection, double pumpSuctionConnection)
+        {
+            StationScheme scheme = new StationScheme();
+            scheme.stationChemeComponents = new Dictionary<StationComponentTypeEnum, (double, double, int[], bool)>()
+            {
+                {StationComponentTypeEnum.Насос_основной, (pumpPressureConnection, pumpSuctionConnection, new int[]{}, false)},
+                {StationComponentTypeEnum.Американка_1, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.РК_резьбовой_кран_1, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.КВ_коллектор_всасывающий, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.Американка_2, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.НиппельНН_1, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.ОКР_обратный_клапан_резьбовой, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.РК_резьбовой_кран_2, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.КН_коллектор_напорный_горизонт_насос, (0, 0, new int[]{}, true)},
+                {StationComponentTypeEnum.Рама_, (0, 0, new int[]{}, false)},
+                {StationComponentTypeEnum.ШУ_, (0, 0, new int[]{}, false)}
+            };
+            return scheme;
+        }
+        #endregion
 
         #endregion
     }

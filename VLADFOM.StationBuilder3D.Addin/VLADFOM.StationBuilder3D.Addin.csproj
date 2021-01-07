@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -31,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -62,6 +64,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="VLADFOM.StationBuilder3D.VSBuilderTestForm">
+      <HintPath>..\VLADFOM.StationBuilder3D.UIForm\bin\Debug\VLADFOM.StationBuilder3D.VSBuilderTestForm.exe</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="StationBuilder3DAddIn.cs" />
@@ -95,8 +100,8 @@
       <Project>{A3DDBF8A-3EBE-4FAB-8F4B-0D974163B571}</Project>
       <Name>VLADFOM.StationBuilder3D.Clslib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\VLADFOM.StationBuilder3D.VSBuilderTestForm\VLADFOM.StationBuilder3D.UIForm.csproj">
-      <Project>{0E48851B-6AE1-4DE2-A802-1B7168A30E10}</Project>
+    <ProjectReference Include="..\VLADFOM.StationBuilder3D.UIForm\VLADFOM.StationBuilder3D.UIForm.csproj">
+      <Project>{0e48851b-6ae1-4de2-a802-1b7168a30e10}</Project>
       <Name>VLADFOM.StationBuilder3D.UIForm</Name>
     </ProjectReference>
   </ItemGroup>

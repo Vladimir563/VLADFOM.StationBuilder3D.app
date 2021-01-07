@@ -6,19 +6,25 @@ using System.Threading.Tasks;
 
 namespace VLADFOM.StationBuilder3D.clslib
 {
-    public class Pump : PumpStationComponent
+    public class Pump : StationComponent
     {
 
-        private int suctionSideDn;
-        private int pressureSideDn;
+        private double suctionSideDn;
+        private double pressureSideDn;
         private int pumpsWidth;
+        private PumpsType pumpsType;
 
-        public int SuctionSideDn
+        public PumpsType PumpsType
+        {
+            get { return pumpsType; }
+            set { pumpsType = value; }
+        }
+        public double SuctionSideDn
         {
             get { return suctionSideDn; }
             set { suctionSideDn = value; }
         }
-        public int PressureSideDn
+        public double PressureSideDn
         {
             get { return pressureSideDn; }
             set { pressureSideDn = value; }
@@ -29,15 +35,15 @@ namespace VLADFOM.StationBuilder3D.clslib
             set { pumpsWidth = value; }
         }
         public Pump( ComponentsLocationPaths _componentsLocation, string _componentsName, int _pumpsWidth, int _pressureSideDn, 
-            int _suctionSideDn, StationComponentsTypeEnum _stationComponentsType) 
+            int _suctionSideDn, StationComponentTypeEnum _stationComponentsType) 
             : base(_stationComponentsType)
         {
-            ComponentsName = _componentsName;
+            ComponentName = _componentsName;
             PumpsWidth = _pumpsWidth;
             PressureSideDn = _pressureSideDn;
             SuctionSideDn = _suctionSideDn;
 
-            PathToTheComponent = ComponentsValCalculator.GetFullPathToTheComponent(_componentsLocation, ComponentsName, this);
+            ComponentLocationPath = ComponentsValCalculator.GetFullPathToTheComponent(_componentsLocation, ComponentName, this);
         }
     }
 }

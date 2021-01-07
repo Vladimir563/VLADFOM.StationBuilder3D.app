@@ -9,11 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VLADFOM.StationBuider3D.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VLADFOM.StationBuilder3D.Addin", "VLADFOM.StationBuilder3D.Addin\VLADFOM.StationBuilder3D.Addin.csproj", "{71A227AC-E266-44FE-BED8-77C159F6F646}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VLADFOM.StationBuilder3D.UIForm", "VLADFOM.StationBuilder3D.VSBuilderTestForm\VLADFOM.StationBuilder3D.UIForm.csproj", "{0E48851B-6AE1-4DE2-A802-1B7168A30E10}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VLADFOM.StationBuilder3D.Blclslib", "VLADFOM.StationBuilder3D.clsbllib\VLADFOM.StationBuilder3D.Blclslib.csproj", "{C3D40B38-E048-4838-AB68-06FB7CF2FFF7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VLADFOM.StationBuilder3D.StartForm", "VLADFOM.StationBuilder3D.VSBuilder3DStartForm\VLADFOM.StationBuilder3D.StartForm.csproj", "{CD80E671-4203-49EA-8BAC-E61D030EC224}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VLADFOM.StationBuilder3D.UIForm", "VLADFOM.StationBuilder3D.UIForm\VLADFOM.StationBuilder3D.UIForm.csproj", "{0E48851B-6AE1-4DE2-A802-1B7168A30E10}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,10 +33,6 @@ Global
 		{71A227AC-E266-44FE-BED8-77C159F6F646}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71A227AC-E266-44FE-BED8-77C159F6F646}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71A227AC-E266-44FE-BED8-77C159F6F646}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0E48851B-6AE1-4DE2-A802-1B7168A30E10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0E48851B-6AE1-4DE2-A802-1B7168A30E10}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0E48851B-6AE1-4DE2-A802-1B7168A30E10}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0E48851B-6AE1-4DE2-A802-1B7168A30E10}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C3D40B38-E048-4838-AB68-06FB7CF2FFF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C3D40B38-E048-4838-AB68-06FB7CF2FFF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3D40B38-E048-4838-AB68-06FB7CF2FFF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +41,10 @@ Global
 		{CD80E671-4203-49EA-8BAC-E61D030EC224}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD80E671-4203-49EA-8BAC-E61D030EC224}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD80E671-4203-49EA-8BAC-E61D030EC224}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E48851B-6AE1-4DE2-A802-1B7168A30E10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E48851B-6AE1-4DE2-A802-1B7168A30E10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E48851B-6AE1-4DE2-A802-1B7168A30E10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E48851B-6AE1-4DE2-A802-1B7168A30E10}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

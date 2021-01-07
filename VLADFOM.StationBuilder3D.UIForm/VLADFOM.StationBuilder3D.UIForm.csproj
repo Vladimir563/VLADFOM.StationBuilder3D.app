@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -31,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -90,13 +92,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\VLADFOM.StationBuilder3D.clsbllib\VLADFOM.StationBuilder3D.Blclslib.csproj">
-      <Project>{C3D40B38-E048-4838-AB68-06FB7CF2FFF7}</Project>
+      <Project>{c3d40b38-e048-4838-ab68-06fb7cf2fff7}</Project>
       <Name>VLADFOM.StationBuilder3D.Blclslib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\VLADFOM.StationBuilder3D.clslib\VLADFOM.StationBuilder3D.Clslib.csproj">
-      <Project>{A3DDBF8A-3EBE-4FAB-8F4B-0D974163B571}</Project>
-      <Name>VLADFOM.StationBuilder3D.Clslib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace VLADFOM.StationBuilder3D.clslib
 {
-    public class ControlCabinet : PumpStationComponent
+    public class ControlCabinet : StationComponent
     {
-        public ControlCabinet(PumpStation _pumpStation, StationComponentsTypeEnum _stationComponentsType, string _componentsName) 
+        public ControlCabinet(PumpStation _pumpStation, StationComponentTypeEnum _stationComponentsType, string _componentsName) 
             : base(_pumpStation, _stationComponentsType)
         {
-            ComponentsName = _componentsName;
-            PathToTheComponent = ComponentsValCalculator.GetFullPathToTheComponent(_pumpStation.componentsLocation, this);
+            ComponentName = _componentsName;
+            ComponentLocationPath = ComponentsValCalculator.GetFullPathToTheComponent(_pumpStation.componentsLocation, this);
         }
     }
 }
